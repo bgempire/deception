@@ -1,6 +1,6 @@
 import bge
 from bge.types import *
-from .bgf import config, isKeyboardPressed
+from .bgf import config, isKeyPressed
 from mathutils import Vector
 
 
@@ -45,11 +45,11 @@ def inputManager(cont):
     
     own = cont.owner
     
-    isUp = isKeyboardPressed(config["KeyUp"])
-    isDown = isKeyboardPressed(config["KeyDown"])
-    isLeft = isKeyboardPressed(config["KeyLeft"])
-    isRight = isKeyboardPressed(config["KeyRight"])
-    isRun = isKeyboardPressed(config["KeyRun"])
+    isUp = isKeyPressed(config["KeyUp"])
+    isDown = isKeyPressed(config["KeyDown"])
+    isLeft = isKeyPressed(config["KeyLeft"])
+    isRight = isKeyPressed(config["KeyRight"])
+    isRun = isKeyPressed(config["KeyRun"])
     
     own["Run"] = bool(isRun)
     
