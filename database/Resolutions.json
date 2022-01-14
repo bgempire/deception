@@ -1,0 +1,11 @@
+// Default game resolutions
+// Reference: https://bgempire.github.io/bgforce/structure
+
+[
+    "Native",
+    "960x540",
+    "1024x576",
+    "1280x720",
+    "1366x768",
+    "1920x1080"
+]
