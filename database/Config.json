@@ -26,5 +26,11 @@
     "ExtraTextures": true,
     
     // Controls
-    "MouseSensitivity": 1.0
+    "MouseSensitivity": 1.0,
+    "KeyUp": "W",
+    "KeyDown": "S",
+    "KeyLeft": "A",
+    "KeyRight": "D",
+    "KeyRun": "LEFTSHIFT",
+    "KeyUse": "E"
 }
