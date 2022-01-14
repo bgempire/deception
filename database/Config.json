@@ -23,5 +23,8 @@
     "Shadows": true,
     "Ramps": true,
     "Nodes": true,
-    "ExtraTextures": true
+    "ExtraTextures": true,
+    
+    // Controls
+    "MouseSensitivity": 1.0
 }
