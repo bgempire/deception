@@ -295,6 +295,25 @@ def getResolutions():
     return resolutions
 
 
+def isKeyboardPressed(key, status=bge.logic.KX_INPUT_ACTIVE):
+    # type: (str, int) -> bool
+    
+    keys = bge.logic.keyboard # type: bge.types.SCA_PythonKeyboard
+    
+    if not key.endswith("KEY"):
+        key += "KEY"
+        
+    key = database["Keys"]["NameCode"].get(key)
+    
+    if key:
+        
+        if hasattr(bge.app, "upbge_version_string"):
+            return status in keys.inputs.get(key).status
+            
+        else:
+            return keys.events.get(key)
+
+
 def _(key):
     # type: (str) -> str
     """Get translation of provided key from current language set in config."""
