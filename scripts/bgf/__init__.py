@@ -295,23 +295,29 @@ def getResolutions():
     return resolutions
 
 
-def isKeyboardPressed(key, status=bge.logic.KX_INPUT_ACTIVE):
-    # type: (str, int) -> bool
+def isKeyPressed(key, status=bge.logic.KX_INPUT_ACTIVE):
+    # type: (str | int, int) -> bool
     
-    keys = bge.logic.keyboard # type: bge.types.SCA_PythonKeyboard
+    _keyboard = bge.logic.keyboard # type: bge.types.SCA_PythonKeyboard
+    _mouse = bge.logic.mouse # type: bge.types.SCA_PythonMouse
     
-    if not key.endswith("KEY"):
-        key += "KEY"
-        
-    key = database["Keys"]["NameCode"].get(key)
+    if type(key) == str:
+        if not key.endswith("KEY"):
+            key += "KEY"
+            
+        key = database["Keys"]["NameCode"].get(key)
     
     if key:
         
         if hasattr(bge.app, "upbge_version_string"):
-            return status in keys.inputs.get(key).status
+            keyPressed = _mouse.inputs.get(key)
+            keyPressed = status in keyPressed.status if keyPressed != None else None
+            return keyPressed if keyPressed != None else status in _keyboard.inputs.get(key).status
             
         else:
-            return keys.events.get(key)
+            keyPressed = _mouse.events.get(key)
+            keyPressed = status in keyPressed if keyPressed != None else None
+            return keyPressed if keyPressed != None else _keyboard.events.get(key)
 
 
 def _(key):
