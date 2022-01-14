@@ -1,0 +1,27 @@
+// Default in-game configuration
+// Reference: https://bgempire.github.io/bgforce/variables
+
+{
+    // General
+    "Lang" : "English",
+    
+    // Sound
+    "BgmVol" : 0.8,
+    "SfxVol" : 1.0,
+    "BgmEnable" : true,
+    "SfxEnable" : true,
+    
+    // Video
+    "Resolution" : "960x540",
+    "Fullscreen" : false,
+    "AnisotropicFiltering": 2,
+    "Mipmaps": "Linear",
+    "MotionBlur": 0.0,
+    "Vsync": true,
+    "Lights": true,
+    "Shaders": true,
+    "Shadows": true,
+    "Ramps": true,
+    "Nodes": true,
+    "ExtraTextures": true
+}
