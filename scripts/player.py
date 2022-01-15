@@ -7,6 +7,7 @@ from mathutils import Vector
 DEBUG = 1
 MOVE_SPEED_FACTOR = 0.035
 MOVE_RUN_MULTIPLIER = 2.2
+FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 5.0
 FLASHLIGHT_BATTERY_DRAIN = 0.0001
 DEFAULT_PROPS = {
@@ -115,6 +116,8 @@ def flashlight(cont):
     _flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
     
     if _flashlight:
+        _flashlight.timeOffset = FLASHLIGHT_MOVE_SMOOTH
+        
         if own["FlashlightOn"]:
             
             if own["FlashlightBattery"] > 0:
