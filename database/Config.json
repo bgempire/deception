@@ -32,5 +32,6 @@
     "KeyLeft": "A",
     "KeyRight": "D",
     "KeyRun": "LEFTSHIFT",
+    "KeyFlashlight": "F",
     "KeyUse": "E"
 }

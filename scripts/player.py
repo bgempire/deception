@@ -7,10 +7,14 @@ from mathutils import Vector
 DEBUG = 1
 MOVE_SPEED_FACTOR = 0.035
 MOVE_RUN_MULTIPLIER = 2.2
+FLASHLIGHT_MAX_ENERGY = 5.0
+FLASHLIGHT_BATTERY_DRAIN = 0.0001
 DEFAULT_PROPS = {
     "Run": False,
     "MoveH": 0,
     "MoveV": 0,
+    "FlashlightOn": False,
+    "FlashlightBattery": 1.0,
 }
 
 
@@ -27,6 +31,7 @@ def main(cont):
         inputManager(cont)
         mouseLook(cont)
         move(cont)
+        flashlight(cont)
 
 
 def init(cont):
@@ -50,8 +55,13 @@ def inputManager(cont):
     isLeft = isKeyPressed(config["KeyLeft"])
     isRight = isKeyPressed(config["KeyRight"])
     isRun = isKeyPressed(config["KeyRun"])
+    isFlashlight = isKeyPressed(config["KeyFlashlight"], status=1)
     
     own["Run"] = bool(isRun)
+    
+    # Turn flashlight on or off
+    if isFlashlight:
+        own["FlashlightOn"] = not own["FlashlightOn"]
     
     # Vertical movement
     if isUp and not isDown:
@@ -96,3 +106,24 @@ def move(cont):
     runFactor = MOVE_RUN_MULTIPLIER if own["Run"] else 1.0
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
     own.applyMovement(moveVector, True)
+
+
+def flashlight(cont):
+    # type: (SCA_PythonController) -> None
+    
+    own = cont.owner
+    _flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
+    
+    if _flashlight:
+        if own["FlashlightOn"]:
+            
+            if own["FlashlightBattery"] > 0:
+                own["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN
+                
+            if own["FlashlightBattery"] < 0:
+                own["FlashlightBattery"] = 0.0
+                
+            _flashlight.energy = FLASHLIGHT_MAX_ENERGY * own["FlashlightBattery"]
+                
+        else:
+            _flashlight.energy = 0.0
