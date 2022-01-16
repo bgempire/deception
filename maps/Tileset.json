@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":19,
+ "tilecount":23,
  "tiledversion":"1.7.2",
  "tileheight":16,
  "tiles":[
@@ -123,6 +123,30 @@
         {
          "id":58,
          "image":"tiles\/Player.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":59,
+         "image":"tiles\/Roof1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":61,
+         "image":"tiles\/RoofCornerOut1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":62,
+         "image":"tiles\/RoofSide1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":60,
+         "image":"tiles\/RoofCornerIn1.png",
          "imageheight":16,
          "imagewidth":16
         }],
