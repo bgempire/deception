@@ -40,6 +40,7 @@ def init(cont):
     
     own = cont.owner
     own.scene.active_camera = own.childrenRecursive.get("PlayerCamera")
+    own.scene["Player"] = own
     
     for key in DEFAULT_PROPS.keys():
         own[key] = DEFAULT_PROPS[key]
