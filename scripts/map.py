@@ -7,8 +7,24 @@ from math import radians
 import sys
 from pprint import pprint, pformat
 from .bgf import dump
+from mathutils import Vector
 
 mapLoader = None # type: MapLoader
+MAP_RADIUS = 10
+
+
+def getTime() -> float:
+    return bge.logic.getRealTime()
+
+
+def getMapPosition(obj):
+    # type: (KX_GameObject) -> tuple[int]
+    
+    return (
+        int(((obj.worldPosition.x // 10) * 10) + 5), 
+        -int(((obj.worldPosition.y // 10) * 10) + 5), 
+    )
+
 
 class JsonLoader:
     
