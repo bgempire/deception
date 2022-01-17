@@ -115,19 +115,26 @@ class MapLoader(JsonLoader):
                 curLayer = {}
                 offsetX = layer.get("offsetx", 0) / tileWidth
                 offsetY = layer.get("offsety", 0) / tileHeight
-                rangeX = range(max(sourceMap["width"], sourceMap["height"]))
-                rangeY = range(min(sourceMap["width"], sourceMap["height"]))
+                mapHeight = sourceMap["height"]
+                mapWidth = sourceMap["width"]
+                rangeX = range(max(mapWidth, mapHeight))
+                rangeY = range(min(mapWidth, mapHeight))
                 
                 for x in rangeX:
                     for y in rangeY:
-                        tileIndex = (y % sourceMap["height"]) * sourceMap["height"] + x
+                        tileIndex = y % mapHeight if mapHeight < mapWidth else y % mapWidth
+                        tileIndex =  (x * mapHeight) + tileIndex
                         curTile = layer["data"][tileIndex] - 1
                         
-                        if curTile:
+                        if curTile > 0:
                             mapTile = self.getMapTile(curTile, (offsetX, offsetY))
                             
                             if mapTile != None:
-                                curLayer[(x, y)] = mapTile
+                                tilePosX = x if mapHeight > mapWidth else y
+                                tilePosY = y if mapHeight > mapWidth else x
+                                tilePos = (tilePosX, tilePosY)
+                                    
+                                curLayer[tilePos] = mapTile
                         
                 targetMap[layer["name"]] = curLayer
                         
