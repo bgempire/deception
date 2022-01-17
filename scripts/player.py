@@ -14,7 +14,7 @@ DEFAULT_PROPS = {
     "Run": False,
     "MoveH": 0,
     "MoveV": 0,
-    "FlashlightOn": False,
+    "FlashlightOn": True,
     "FlashlightBattery": 1.0,
     "MapPositionStr": "[0, 0]",
     "CurPos": "",
