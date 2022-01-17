@@ -395,6 +395,17 @@ def _(key):
         return ""
 
 
+def dump(obj, file="dump.py"):
+    # type: (object, str) -> None
+    """ Dump to file the object content. """
+    
+    from pprint import pformat
+    file = curPath / file # type: Path
+    
+    with open(file.as_posix(), "w") as _file:
+        _file.write(pformat(obj))
+        print("> Dumped object to", file.as_posix())
+
 try:
     __loadFramework()
 except Exception as exc:
