@@ -14,15 +14,15 @@ MAP_RADIUS = 10
 
 
 def getTime() -> float:
-    return bge.logic.getRealTime()
+    return bge.logic.getClockTime()
 
 
 def getMapPosition(obj):
     # type: (KX_GameObject) -> tuple[int]
     
     return (
-        int(((obj.worldPosition.x // 10) * 10) + 5), 
-        -int(((obj.worldPosition.y // 10) * 10) + 5), 
+        int(((obj.worldPosition.x // 10) * 10 // 2) + 5), 
+        -int(((obj.worldPosition.y // 10) * 10 // 2) + 5), 
     )
 
 
@@ -67,8 +67,8 @@ class MapLoader(JsonLoader):
         self.maps = self.getMaps(mapsRaw)
         
     
-    def getMapTile(self, tileId):
-        # type: (int) -> dict[str, object]
+    def getMapTile(self, tileId, offset=(0.0, 0.0)):
+        # type: (int, tuple[float]) -> dict[str, object]
         """ Get tile data, including id, name and rotation. """
         tileBin = bin(tileId)[2:].replace("b", "").zfill(32)
         rotBits = tileBin[0:3]
@@ -77,6 +77,7 @@ class MapLoader(JsonLoader):
             "Id" : int(tileBin[3:], 2),
             "Rotation" : 0,
             "Name" : "",
+            "Offset": offset
         }
         
         if rotBits == "101": data["Rotation"] = 90
@@ -107,20 +108,26 @@ class MapLoader(JsonLoader):
         for map_ in mapsRaw.keys():
             sourceMap = mapsRaw[map_]
             targetMap = {}
+            tileWidth = sourceMap["tilewidth"]
+            tileHeight = sourceMap["tileheight"]
             
             for layer in sourceMap["layers"]:
                 curLayer = {}
-                getSignal = lambda num: 0.5 if num > 0 else -0.5
-                offsetX = getSignal(layer.get("offsetx")) if layer.get("offsetx") else 0
-                offsetY = getSignal(layer.get("offsety")) if layer.get("offsety") else 0
+                offsetX = layer.get("offsetx", 0) / tileWidth
+                offsetY = layer.get("offsety", 0) / tileHeight
+                rangeX = range(max(sourceMap["width"], sourceMap["height"]))
+                rangeY = range(min(sourceMap["width"], sourceMap["height"]))
                 
-                for y in range(sourceMap["height"]):
-                    for x in range(sourceMap["width"]):
+                for x in rangeX:
+                    for y in rangeY:
                         tileIndex = (y % sourceMap["height"]) * sourceMap["height"] + x
                         curTile = layer["data"][tileIndex] - 1
-                        mapTile = self.getMapTile(curTile)
-                        if mapTile is not None:
-                            curLayer[(x + offsetX, y + offsetY)] = mapTile
+                        
+                        if curTile:
+                            mapTile = self.getMapTile(curTile, (offsetX, offsetY))
+                            
+                            if mapTile != None:
+                                curLayer[(x, y)] = mapTile
                         
                 targetMap[layer["name"]] = curLayer
                         
@@ -136,13 +143,35 @@ class MapSpawner:
         """ Map spawner and manager. """
         
         global mapLoader
+        self.playerSet = False
         self.object = cont.owner
         self.mapLoader = mapLoader
-        self.spawnMap()
+        self.lastPosition = None
+        self.curMap = self.__getMap()
         
     
-    def getMap(self):
-        # type: () -> dict[str, object]
+    @staticmethod
+    def __getHeightFromLayer(layer):
+        # type: (str) -> int
+        
+        layerSplit = layer.split(":")
+        
+        if len(layerSplit) == 2:
+            return literal_eval(layerSplit[1])
+        else:
+            return 0
+    
+        
+    @staticmethod
+    def __isPositionBetween(curPos, tilePos):
+        # type: (tuple[int], tuple[int]) -> int
+        
+        return curPos[0] - MAP_RADIUS <= tilePos[0] <= curPos[0] + MAP_RADIUS \
+            and curPos[1] - MAP_RADIUS <= tilePos[1] <= curPos[1] + MAP_RADIUS
+    
+    
+    def __getMap(self):
+        # type: () -> dict[str, dict[tuple, dict]]
         """ Map spawner and manager. """
         if "-" in sys.argv:
             path = Path(sys.argv[-1])
@@ -156,43 +185,101 @@ class MapSpawner:
                 return self.mapLoader.maps[key]
                 
     
-    def spawnMap(self):
-        # type: () -> None
-        curMap = self.getMap()
+    def despawnMap(self, curPos, all=False):
+        # type: (list[int], bool) -> None
         
-        if not "MapObjs" in self.object:
-            self.object["MapObjs"] = {}
+        mapObjs = self.object["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
+        print('run despawnMap', getTime())
+        
+        for layer in mapObjs.keys():
+            for coord in list(mapObjs[layer].keys()):
+                if all or not self.__isPositionBetween(curPos, coord):
+                    mapObjs[layer][coord].endObject()
+                    del mapObjs[layer][coord]
+    
+    
+    def spawnMap(self, curPos, all=False):
+        # type: (list[int], bool) -> None
+        
+        if curPos != self.lastPosition:
+            curMap = self.curMap
             
+            if not "MapObjs" in self.object:
+                self.object["MapObjs"] = {}
+                
+            mapObjs = self.object["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
+            self.despawnMap(curPos, all=all)
+            self.spawnActors(curPos, all=all)
+                
+            for layer in curMap.keys():
+                
+                if layer.lower().startswith("actor"):
+                    continue
+                
+                height = self.__getHeightFromLayer(layer)
+                
+                if not layer in mapObjs.keys():
+                    mapObjs[layer] = {}
+                    
+                for coord in curMap[layer].keys():
+                    curTile = curMap[layer][coord]
+                    
+                    if all or self.__isPositionBetween(curPos, coord):
+                        coord3d = coord + tuple([height])
+                        coord3d = (coord3d[0] * 2, -coord3d[1] * 2, coord3d[2])
+                        obj = self.object.scene.addObject(curTile["Name"]) # type: KX_GameObject
+                        obj.worldPosition = coord3d
+                        obj.worldPosition.x += curTile["Offset"][0] * 2
+                        obj.worldPosition.y += -curTile["Offset"][1] * 2
+                        obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
+                        mapObjs[layer][coord] = obj
+                        
+            self.lastPosition = curPos
+            print('run spawnMap', getTime())
+    
+    
+    def spawnActors(self, curPos, all=False):
+        # type: (list[int], bool) -> None
+        curMap = self.curMap
+        
+        if not "MapActors" in self.object:
+            self.object["MapActors"] = {}
+            
+        mapActors = self.object["MapActors"] # type: dict[str, dict[tuple, KX_GameObject]]
+        
         for layer in curMap.keys():
             
-            if not layer in self.object["MapObjs"].keys():
-                self.object["MapObjs"][layer] = {}
-                
-            layerSplit = layer.split(":")
-            height = 0
+            if not layer.lower().startswith("actor"):
+                continue
             
-            if len(layerSplit) == 2:
-                height = literal_eval(layerSplit[1])
-                del layerSplit
+            height = self.__getHeightFromLayer(layer)
+            
+            if not layer in mapActors.keys():
+                mapActors[layer] = {}
                 
             for coord in curMap[layer].keys():
                 curTile = curMap[layer][coord]
-                coord3d = coord + tuple([height])
-                coord3d = (coord3d[0] * 2, -coord3d[1] * 2, coord3d[2])
-                obj = None
                 
-                if curTile["Name"] == "Player":
-                    obj = self.object.scene["Player"] # type: KX_GameObject
+                if all or self.__isPositionBetween(curPos, coord):
+                    coord3d = coord + tuple([height])
+                    coord3d = (coord3d[0] * 2, -coord3d[1] * 2, coord3d[2])
+                    setPlayer = curTile["Name"] == "Player" and not self.playerSet
                     
-                else:
-                    obj = self.object.scene.addObject(curTile["Name"]) # type: KX_GameObject
-                    
-                obj.worldPosition = coord3d
-                obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
-                self.object["MapObjs"][layer][coord] = obj
-                
-                if curTile["Name"] == "Player":
-                    obj.worldPosition.z += 1
+                    if setPlayer:
+                        obj = self.object.scene["Player"] # type: KX_GameObject
+                        obj.worldPosition = coord3d
+                        obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
+                        obj.worldPosition.z += 1
+                        obj.scene["MapPosition"] = getMapPosition(obj)
+                        self.playerSet = True
+                        
+                    elif curTile["Name"] != "Player":
+                        obj = self.object.scene.addObject(curTile["Name"]) # type: KX_GameObject
+                        obj.worldPosition = coord3d
+                        obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
+                        mapActors[layer][coord] = obj
+            
+        print('run spawnActors', getTime())
 
 
 def spawner(cont):
@@ -202,12 +289,19 @@ def spawner(cont):
     
     always = cont.sensors["Always"] # type: SCA_AlwaysSensor
     global mapLoader
+    spawnAll = 1
     
     if always.positive:
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
             mapLoader = MapLoader()
             dump(mapLoader.maps)
             print("> Map initializated")
+            
+        if "MapPosition" in own.scene:
+            
+            if not "MapSpawner" in own:
+                own["MapSpawner"] = mapSpawner = MapSpawner(cont)
+                mapSpawner.spawnMap(own.scene["MapPosition"], all=spawnAll)
                 
-        if not "MapSpawner" in own:
-            own["MapSpawner"] = MapSpawner(cont)
+            if "MapSpawner" in own:
+                mapSpawner = own["MapSpawner"] # type: MapSpawner
