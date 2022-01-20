@@ -2,7 +2,7 @@
 
 from . import bgf
 
-from .map import loader as mapLoader
+from .map import loader as __mapLoader
 
 # Load map
-mapLoader.load()
+__mapLoader.load()
