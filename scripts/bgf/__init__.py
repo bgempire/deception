@@ -1,11 +1,7 @@
 import bge
-import json
-import zlib
 import aud
 
-from ast import literal_eval
 from pathlib import Path
-from pprint import pformat
 
 
 # Constants
@@ -31,6 +27,7 @@ def __loadFramework():
     # type: () -> None
     """Main function called at start."""
     
+    from ast import literal_eval
     global DEBUG, config, database, lang, state, cache, sounds, requests, curPath
     
     if DEBUG: print("\n> Initializing framework")
@@ -112,6 +109,8 @@ def __getJsonNoComments(fileContent):
 def __replaceDictVariables(target, variables=None):
     # type: (dict, dict) -> None
     """Replaces all variable values from dict recursively."""
+    
+    from ast import literal_eval
         
     # Move all variables from top level to its own dict
     if variables is None:
@@ -142,9 +141,13 @@ def __replaceDictVariables(target, variables=None):
             __replaceDictVariables(target[key], variables)
 
 
-def loadFile(_file, debugIndent=0):
-    # type: (Path, int) -> dict
+def loadFile(_file):
+    # type: (Path) -> dict
     """Load file from given path and return its content as a dict."""
+    
+    import json
+    import zlib
+    from ast import literal_eval
                 
     if not _file.exists() and _file.parent.exists():
         for f in _file.parent.iterdir():
@@ -157,7 +160,7 @@ def loadFile(_file, debugIndent=0):
     loaded = False
     isDict = True
         
-    if _file.suffix == ".json":
+    if _file.suffix in (".json", ".jsonc"):
         with open(_file.as_posix(), "r", encoding="utf-8") as openedFile:
             dataRaw = __getJsonNoComments(openedFile.read())
             isDict = dataRaw.startswith("{")
@@ -171,7 +174,7 @@ def loadFile(_file, debugIndent=0):
                     data = literal_eval(openedFile.read())
                     loaded = True
                 except:
-                    if DEBUG: print((debugIndent * " ") + "X Could not load file:", relativePath)
+                    if DEBUG: print("X Could not load file:", relativePath)
                     
         # Process variables
         if isDict: __replaceDictVariables(data)
@@ -182,28 +185,39 @@ def loadFile(_file, debugIndent=0):
             loaded = True
             
     if loaded:
-        if DEBUG: print((debugIndent * " ") + "> File loaded:", relativePath)
+        if DEBUG: print("> File loaded:", relativePath)
             
     return data
 
 
-def loadFiles(directory, debugIndent=0):
-    # type: (Path, int) -> dict
-    """Get all files from given directory, load their content and return data as dict."""
+def loadFiles(directory, pattern=""):
+    # type: (Path, str) -> dict
+    """Get all files from given directory recursively, 
+    load their content and return data as dict."""
     
-    relativePath = directory.as_posix().replace(curPath.as_posix(), "")[1:]
-    if DEBUG: print((debugIndent * " ") + "> Loading files from:", relativePath)
+    from fnmatch import filter
+    if DEBUG: print("> Loading files from:", directory.as_posix().replace(curPath.as_posix(), "")[1:])
     data = {}
-
+    
     for _file in directory.iterdir():
-        if _file.suffix in (".json", ".dat"):
-            data[_file.stem] = loadFile(_file, debugIndent=debugIndent + 2)
+        
+        if _file.is_dir():
+            data[_file.name] = loadFiles(_file, pattern=pattern)
+            
+        elif _file.suffix in (".json", ".jsonc", ".dat"):
+            if not pattern or filter([_file.name], pattern):
+                data[_file.stem] = loadFile(_file)
             
     return data
 
 
-def saveFile(_file, data, ext=None, debugIndent=0):
-    # type: (Path, object, str, int) -> None
+def saveFile(_file, data, ext=None):
+    # type: (Path, object, str) -> None
+    
+    import json
+    import zlib
+    from pprint import pformat
+    
     saved = False
     
     if ext is None:
@@ -211,7 +225,7 @@ def saveFile(_file, data, ext=None, debugIndent=0):
     else:
         _file = _file.with_suffix(ext)
     
-    if ext == ".json":
+    if ext in (".json", ".jsonc"):
         with open(_file.as_posix(), "w", encoding="utf-8") as openedFile:
             try:
                 openedFile.write(json.dumps(data, indent=4))
@@ -229,23 +243,22 @@ def saveFile(_file, data, ext=None, debugIndent=0):
     if saved:
         if DEBUG:
             relativePath = _file.as_posix().replace(curPath.as_posix(), "")[1:]
-            print((debugIndent * " ") + "> Saved file to:", relativePath)
+            print("> Saved file to:", relativePath)
 
 
-def getFilePaths(directory, debugIndent=0):
-    # type: (Path, int) -> dict
+def getFilePaths(directory):
+    # type: (Path) -> dict
     """Get all files from given directory and return dict with name : path relations."""
     
     relativePath = directory.as_posix().replace(curPath.as_posix(), "")[1:]
-    if DEBUG: print((debugIndent * " ") + "> Getting files from:", relativePath)
+    if DEBUG: print("> Getting files from:", relativePath)
     data = {}
 
     if directory.exists():
         for _file in directory.iterdir():
             data[_file.stem] = _file.as_posix()
             if DEBUG:
-                print(((debugIndent + 2) * " ") + "> File get:", 
-                    _file.as_posix().replace(curPath.as_posix(), "")[1:])
+                print("> File get:", _file.as_posix().replace(curPath.as_posix(), "")[1:])
                     
     else:
         directory.mkdir(parents=True)
