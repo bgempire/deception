@@ -37,10 +37,12 @@ def main(cont):
 
 def init(cont):
     # type: (SCA_PythonController) -> None
-    
     own = cont.owner
     own.scene.active_camera = own.childrenRecursive.get("PlayerCamera")
     own.scene["Player"] = own
+    
+    global DEBUG
+    DEBUG = own.groupObject.get("Debug", False)
     
     for key in DEFAULT_PROPS.keys():
         own[key] = DEFAULT_PROPS[key]
