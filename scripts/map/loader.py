@@ -8,8 +8,7 @@ def load():
     # type: () -> None
     """ Initialize map loader. """
     
-    from ..bgf import curPath, loadFile, loadFiles, dump
-    from pprint import pprint
+    from ..bgf import curPath, loadFile, loadFiles
     
     global __tilesetRaw, __mapsRaw, maps, tileset
     __tilesetRaw = loadFile(curPath / "maps/Tileset.json")
@@ -65,12 +64,11 @@ def __getMaps():
     """ Get formatted maps from raw maps data. """
     
     global __mapsRaw
-    from ..bgf import dump
+
     maps = {}
     
     for map_ in __mapsRaw.keys():
         sourceMap = __mapsRaw[map_]
-        dump(__mapsRaw, 'sourcemap.py')
         targetMap = {}
         tileWidth = sourceMap["tilewidth"]
         tileHeight = sourceMap["tileheight"]
