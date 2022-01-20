@@ -42,7 +42,7 @@ def init(cont):
     own.scene["Player"] = own
     
     global DEBUG
-    DEBUG = own.groupObject.get("Debug", False)
+    DEBUG = own.groupObject.get("Debug", False) if own.groupObject else False
     
     for key in DEFAULT_PROPS.keys():
         own[key] = DEFAULT_PROPS[key]
