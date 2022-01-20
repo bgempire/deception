@@ -16,8 +16,6 @@ DEFAULT_PROPS = {
     "MoveV": 0,
     "FlashlightOn": True,
     "FlashlightBattery": 1.0,
-    "MapPositionStr": "[0, 0]",
-    "CurPos": "",
 }
 
 
@@ -110,13 +108,6 @@ def move(cont):
     runFactor = MOVE_RUN_MULTIPLIER if own["Run"] else 1.0
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
     own.applyMovement(moveVector, True)
-    
-    # Set position of map spawner
-    from .map import getMapPosition
-    curPos = getMapPosition(own)
-    own.scene["MapPosition"] = curPos
-    own["MapPositionStr"] = str(curPos)
-    own["CurPos"] = str(tuple(map(round, [own.worldPosition.x, -own.worldPosition.y])))
 
 
 def flashlight(cont):
