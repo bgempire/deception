@@ -1,3 +1,6 @@
+""" This module is responsible for spawning the map in-game using data from 
+the loader module. """
+
 import bge
 from bge.types import *
 
@@ -25,30 +28,27 @@ def main(cont):
     if always.positive:
         
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
-            init(cont)
+            __init(cont)
             
-        setCurPosFromCamera(cont)
+        __setCurPosFromCamera(cont)
         
         if own["Timer"] >= 0:
-            spawnMap(cont, own.scene["MapPosition"], all=spawnAll)
+            __spawnMap(cont, own.scene["MapPosition"], all=spawnAll)
             
             own["Timer"] = -1
 
 
-def init(cont):
-    # type: (SCA_PythonController) -> None
+def __despawnMap(cont, curPos, all=False):
+    # type: (SCA_PythonController, list[int], bool) -> None
     
     own = cont.owner
-    global DEBUG
-    DEBUG = own.groupObject.get("Debug", False) if own.groupObject else False
+    mapObjs = own["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
     
-    for key in DEFAULT_PROPS.keys():
-        own[key] = DEFAULT_PROPS[key]
-        if DEBUG: own.addDebugProperty(key, True)
-        
-    own["CurMap"] = __getMap(cont)
-        
-    print("> Map initializated")
+    for layer in mapObjs.keys():
+        for coord in list(mapObjs[layer].keys()):
+            if all or not __isPositionBetween(curPos, coord):
+                mapObjs[layer][coord].endObject()
+                del mapObjs[layer][coord]
 
 
 def __getHeightFromLayer(layer):
@@ -58,13 +58,6 @@ def __getHeightFromLayer(layer):
     
     layerSplit = layer.split(":")
     return literal_eval(layerSplit[1]) if len(layerSplit) == 2 else 0
-
-    
-def __isPositionBetween(curPos, tilePos):
-    # type: (tuple[int], tuple[int]) -> int
-    
-    return curPos[0] - MAP_RADIUS <= tilePos[0] <= curPos[0] + MAP_RADIUS \
-        and curPos[1] - MAP_RADIUS <= tilePos[1] <= curPos[1] + MAP_RADIUS
 
 
 def __getMap(cont):
@@ -87,65 +80,44 @@ def __getMap(cont):
     else:
         for key in maps.keys():
             return maps[key]
-            
 
-def despawnMap(cont, curPos, all=False):
-    # type: (SCA_PythonController, list[int], bool) -> None
+
+def __init(cont):
+    # type: (SCA_PythonController) -> None
     
     own = cont.owner
-    mapObjs = own["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
+    global DEBUG
+    DEBUG = own.groupObject.get("Debug", False) if own.groupObject else False
     
-    for layer in mapObjs.keys():
-        for coord in list(mapObjs[layer].keys()):
-            if all or not __isPositionBetween(curPos, coord):
-                mapObjs[layer][coord].endObject()
-                del mapObjs[layer][coord]
-
-
-def spawnMap(cont, curPos, all=False):
-    # type: (SCA_PythonController, tuple[int], bool) -> None
-    
-    from math import radians
-    
-    own = cont.owner
-    
-    if curPos != own["LastPosition"] and (not all or not "MapObjs" in own):
-        curMap = own["CurMap"] # type: dict[str, object]
+    for key in DEFAULT_PROPS.keys():
+        own[key] = DEFAULT_PROPS[key]
+        if DEBUG: own.addDebugProperty(key, True)
         
-        if not "MapObjs" in own:
-            own["MapObjs"] = {}
-            
-        mapObjs = own["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
-        despawnMap(cont, curPos, all=all)
-        spawnActors(cont, curPos, all=all)
-            
-        for layer in curMap.keys():
-            
-            if layer.lower().startswith("actor"):
-                continue
-            
-            height = __getHeightFromLayer(layer)
-            
-            if not layer in mapObjs.keys():
-                mapObjs[layer] = {}
-                
-            for coord in curMap[layer].keys():
-                curTile = curMap[layer][coord]
-                
-                if all or __isPositionBetween(curPos, coord):
-                    coord3d = coord + tuple([height])
-                    coord3d = (coord3d[0] * 2, -coord3d[1] * 2, coord3d[2])
-                    obj = own.scene.addObject(curTile["Name"]) # type: KX_GameObject
-                    obj.worldPosition = coord3d
-                    obj.worldPosition.x += curTile["Offset"][0] * 2
-                    obj.worldPosition.y += -curTile["Offset"][1] * 2
-                    obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
-                    mapObjs[layer][coord] = obj
-                    
-        own["LastPosition"] = curPos
+    own["CurMap"] = __getMap(cont)
+        
+    print("> Map initializated")
 
 
-def spawnActors(cont, curPos, all=False):
+def __isPositionBetween(curPos, tilePos):
+    # type: (tuple[int], tuple[int]) -> int
+    
+    return curPos[0] - MAP_RADIUS <= tilePos[0] <= curPos[0] + MAP_RADIUS \
+        and curPos[1] - MAP_RADIUS <= tilePos[1] <= curPos[1] + MAP_RADIUS
+
+
+def __setCurPosFromCamera(cont):
+    # type: (SCA_PythonController) -> None
+    
+    own = cont.owner
+    camera = own.scene.active_camera
+    
+    curPos = __getMapPosition(camera)
+    own.scene["MapPosition"] = curPos
+    own["MapPositionStr"] = str(curPos)
+    own["CurPos"] = str(tuple(map(round, [camera.worldPosition.x, -camera.worldPosition.y])))
+
+
+def __spawnActors(cont, curPos, all=False):
     # type: (SCA_PythonController, list[int], bool) -> None
     
     from math import radians
@@ -181,7 +153,7 @@ def spawnActors(cont, curPos, all=False):
                     obj.worldPosition = coord3d
                     obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
                     obj.worldPosition.z += 1
-                    obj.scene["MapPosition"] = getMapPosition(obj)
+                    obj.scene["MapPosition"] = __getMapPosition(obj)
                     own["PlayerSet"] = True
                     
                 elif curTile["Name"] != "Player":
@@ -191,25 +163,58 @@ def spawnActors(cont, curPos, all=False):
                     mapActors[layer][coord] = obj
 
 
-def setCurPosFromCamera(cont):
-    # type: (SCA_PythonController) -> None
+def __spawnMap(cont, curPos, all=False):
+    # type: (SCA_PythonController, tuple[int], bool) -> None
+    
+    from math import radians
     
     own = cont.owner
-    camera = own.scene.active_camera
     
-    curPos = getMapPosition(camera)
-    own.scene["MapPosition"] = curPos
-    own["MapPositionStr"] = str(curPos)
-    own["CurPos"] = str(tuple(map(round, [camera.worldPosition.x, -camera.worldPosition.y])))
-    
+    if curPos != own["LastPosition"] and (not all or not "MapObjs" in own):
+        curMap = own["CurMap"] # type: dict[str, object]
+        
+        if not "MapObjs" in own:
+            own["MapObjs"] = {}
+            
+        mapObjs = own["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
+        __despawnMap(cont, curPos, all=all)
+        __spawnActors(cont, curPos, all=all)
+            
+        for layer in curMap.keys():
+            
+            if layer.lower().startswith("actor"):
+                continue
+            
+            height = __getHeightFromLayer(layer)
+            
+            if not layer in mapObjs.keys():
+                mapObjs[layer] = {}
+                
+            for coord in curMap[layer].keys():
+                curTile = curMap[layer][coord]
+                
+                if all or __isPositionBetween(curPos, coord):
+                    coord3d = coord + tuple([height])
+                    coord3d = (coord3d[0] * 2, -coord3d[1] * 2, coord3d[2])
+                    obj = own.scene.addObject(curTile["Name"]) # type: KX_GameObject
+                    obj.worldPosition = coord3d
+                    obj.worldPosition.x += curTile["Offset"][0] * 2
+                    obj.worldPosition.y += -curTile["Offset"][1] * 2
+                    obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
+                    mapObjs[layer][coord] = obj
+                    
+        own["LastPosition"] = curPos
+
 
 # HELPER FUNCTIONS
 
-def getTime() -> float:
+def __getTime():
+    # type: () -> float
+    
     return round(bge.logic.getClockTime(), 2)
 
 
-def getMapPosition(obj):
+def __getMapPosition(obj):
     # type: (KX_GameObject) -> tuple[int]
     
     return (

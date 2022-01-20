@@ -1,5 +1,10 @@
+""" This module loads Tiled maps and tilesets from the folder maps and parses 
+it to in-game coordinates and other relevant data. """
+
+# Public variables
 tileset = {} # type: dict[int, dict[str, object]]
 maps = {} # type: dict[str, dict[str, object]]
+
 __tilesetRaw = {} # type: dict[str, object]
 __mapsRaw = {} # type: dict[str, dict[str, object]]
 
@@ -15,49 +20,7 @@ def load():
     __mapsRaw = loadFiles(curPath / "maps", pattern="Map*.json")
     tileset = __getTileset()
     maps = __getMaps()
-    
 
-def __getMapTile(tileId, offset=(0.0, 0.0)):
-    # type: (int, tuple[float]) -> dict[str, object]
-    """ Get tile data, including id, name and rotation. """
-    
-    global tileset
-    
-    tileBin = bin(tileId)[2:].replace("b", "").zfill(32)
-    rotBits = tileBin[0:3]
-    
-    data = {
-        "Id" : int(tileBin[3:], 2),
-        "Rotation" : 0,
-        "Name" : "",
-        "Offset": offset
-    }
-    
-    if rotBits == "101": data["Rotation"] = 90
-    elif rotBits == "110": data["Rotation"] = 180
-    elif rotBits == "011": data["Rotation"] = 270
-    
-    if data["Id"] in tileset.keys():
-        data.update(tileset[data["Id"]])
-        return data
-        
-        
-def __getTileset():
-    # type: () -> dict
-    """ Get formatted tiles from raw tileset data. """
-    
-    from pathlib import Path
-    
-    global __tilesetRaw
-    tileset = {}
-    
-    for tile in __tilesetRaw["tiles"]:
-        tileset[tile["id"]] = {
-            "Name" : Path(tile["image"]).stem,
-        }
-        
-    return tileset
-    
 
 def __getMaps():
     # type: () -> dict
@@ -103,4 +66,46 @@ def __getMaps():
         maps[map_] = targetMap
         
     return maps
+
+
+def __getMapTile(tileId, offset=(0.0, 0.0)):
+    # type: (int, tuple[float]) -> dict[str, object]
+    """ Get tile data, including id, name and rotation. """
+    
+    global tileset
+    
+    tileBin = bin(tileId)[2:].replace("b", "").zfill(32)
+    rotBits = tileBin[0:3]
+    
+    data = {
+        "Id" : int(tileBin[3:], 2),
+        "Rotation" : 0,
+        "Name" : "",
+        "Offset": offset
+    }
+    
+    if rotBits == "101": data["Rotation"] = 90
+    elif rotBits == "110": data["Rotation"] = 180
+    elif rotBits == "011": data["Rotation"] = 270
+    
+    if data["Id"] in tileset.keys():
+        data.update(tileset[data["Id"]])
+        return data
+
+
+def __getTileset():
+    # type: () -> dict
+    """ Get formatted tiles from raw tileset data. """
+    
+    from pathlib import Path
+    
+    global __tilesetRaw
+    tileset = {}
+    
+    for tile in __tilesetRaw["tiles"]:
+        tileset[tile["id"]] = {
+            "Name" : Path(tile["image"]).stem,
+        }
+        
+    return tileset
 
