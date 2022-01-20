@@ -1,3 +1,5 @@
+""" This module is responsible for the player logic, from movement to scenery interactions. """
+
 import bge
 from bge.types import *
 from .bgf import config, isKeyPressed
@@ -27,15 +29,38 @@ def main(cont):
     if always.positive:
         
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
-            init(cont)
+            __init(cont)
             
-        inputManager(cont)
-        mouseLook(cont)
-        move(cont)
-        flashlight(cont)
+        __inputManager(cont)
+        __mouseLook(cont)
+        __move(cont)
+        __flashlight(cont)
 
 
-def init(cont):
+def __flashlight(cont):
+    # type: (SCA_PythonController) -> None
+    
+    own = cont.owner
+    _flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
+    
+    if _flashlight:
+        _flashlight.timeOffset = FLASHLIGHT_MOVE_SMOOTH
+        
+        if own["FlashlightOn"]:
+            
+            if own["FlashlightBattery"] > 0:
+                own["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN
+                
+            if own["FlashlightBattery"] < 0:
+                own["FlashlightBattery"] = 0.0
+                
+            _flashlight.energy = FLASHLIGHT_MAX_ENERGY * own["FlashlightBattery"]
+                
+        else:
+            _flashlight.energy = 0.0
+
+
+def __init(cont):
     # type: (SCA_PythonController) -> None
     own = cont.owner
     own.scene.active_camera = own.childrenRecursive.get("PlayerCamera")
@@ -49,7 +74,7 @@ def init(cont):
         if DEBUG: own.addDebugProperty(key, True)
 
 
-def inputManager(cont):
+def __inputManager(cont):
     # type: (SCA_PythonController) -> None
     
     own = cont.owner
@@ -88,7 +113,7 @@ def inputManager(cont):
         own["MoveH"] = 0
 
 
-def mouseLook(cont):
+def __mouseLook(cont):
     # type: (SCA_PythonController) -> None
     
     own = cont.owner
@@ -102,7 +127,7 @@ def mouseLook(cont):
         cont.activate(sen)
 
 
-def move(cont):
+def __move(cont):
     # type: (SCA_PythonController) -> None
     
     own = cont.owner
@@ -111,25 +136,3 @@ def move(cont):
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
     own.applyMovement(moveVector, True)
 
-
-def flashlight(cont):
-    # type: (SCA_PythonController) -> None
-    
-    own = cont.owner
-    _flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
-    
-    if _flashlight:
-        _flashlight.timeOffset = FLASHLIGHT_MOVE_SMOOTH
-        
-        if own["FlashlightOn"]:
-            
-            if own["FlashlightBattery"] > 0:
-                own["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN
-                
-            if own["FlashlightBattery"] < 0:
-                own["FlashlightBattery"] = 0.0
-                
-            _flashlight.energy = FLASHLIGHT_MAX_ENERGY * own["FlashlightBattery"]
-                
-        else:
-            _flashlight.energy = 0.0
