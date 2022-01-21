@@ -85,12 +85,17 @@ def __inputManager(cont):
     isRight = isKeyPressed(config["KeyRight"])
     isRun = isKeyPressed(config["KeyRun"])
     isFlashlight = isKeyPressed(config["KeyFlashlight"], status=1)
+    isUse = isKeyPressed(config["KeyUse"], status=1)
     
     own["Run"] = bool(isRun)
     
     # Turn flashlight on or off
     if isFlashlight:
         own["FlashlightOn"] = not own["FlashlightOn"]
+        
+    # Use aimed object
+    if isUse:
+        __use(cont)
     
     # Vertical movement
     if isUp and not isDown:
@@ -136,3 +141,14 @@ def __move(cont):
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
     own.applyMovement(moveVector, True)
 
+
+def __use(cont):
+    # type: (SCA_PythonController) -> None
+    
+    own = cont.owner
+    camera = own.scene.active_camera
+    
+    hitObject = camera.getScreenRay(0.5, 0.5, 1)
+    
+    if hitObject:
+        hitObject.playAction("Door", 0, 28)
