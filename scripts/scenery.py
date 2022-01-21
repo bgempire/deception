@@ -5,7 +5,7 @@ from bge.types import *
 def door(cont):
     # type: (SCA_PythonController) -> None
     
-    DEBUG = 1
+    DEBUG = 0
     DOOR_SPEED = 0.6
     ANIMS = {
         "Open1": (0, 20, bge.logic.KX_ACTION_MODE_PLAY),
