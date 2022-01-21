@@ -6,7 +6,7 @@ from bge.types import *
 
 
 DEBUG = 0
-MAP_RADIUS = 10 # meters
+MAP_RADIUS = 40 # meters
 SPAWN_UPDATE_INTERVAL = 1 # seconds
 DEFAULT_PROPS = {
     "MapPositionStr": "",
@@ -20,10 +20,11 @@ DEFAULT_PROPS = {
 def main(cont):
     # type: (SCA_PythonController) -> None
     
+    global MAP_RADIUS
     own = cont.owner
-    
     always = cont.sensors["Always"] # type: SCA_AlwaysSensor
     spawnAll = own.groupObject.get("SpawnAll", False)
+    MAP_RADIUS = own.groupObject.get("MapRadius", 30)
     
     if always.positive:
         
@@ -142,19 +143,19 @@ def __spawnActors(cont, curPos, all=False):
             
         for coord in curMap[layer].keys():
             curTile = curMap[layer][coord]
+            coord3d = coord + tuple([height])
+            setPlayer = curTile["Name"] == "Player" and not own["PlayerSet"]
+                
+            if setPlayer and own.scene.get("Player"):
+                obj = own.scene["Player"] # type: KX_GameObject
+                __setTile(obj, curTile, coord3d)
+                obj.worldPosition.z += 1
+                obj.scene["MapPosition"] = __getMapPosition(obj)
+                own["PlayerSet"] = True
             
             if all or __isPositionBetween(curPos, coord):
-                coord3d = coord + tuple([height])
-                setPlayer = curTile["Name"] == "Player" and not own["PlayerSet"]
-                
-                if setPlayer and own.scene.get("Player"):
-                    obj = own.scene["Player"] # type: KX_GameObject
-                    __setTile(obj, curTile, coord3d)
-                    obj.worldPosition.z += 1
-                    obj.scene["MapPosition"] = __getMapPosition(obj)
-                    own["PlayerSet"] = True
                     
-                elif curTile["Name"] != "Player":
+                if curTile["Name"] != "Player":
                     obj = own.scene.addObject(curTile["Name"]) # type: KX_GameObject
                     __setTile(obj, curTile, coord3d)
                     mapActors[layer][coord] = obj
@@ -168,14 +169,19 @@ def __spawnMap(cont, curPos, all=False):
     own = cont.owner
     
     if curPos != own["LastPosition"] and (not all or not "MapObjs" in own):
-        curMap = own["CurMap"] # type: dict[str, object]
+        curMap = own["CurMap"] # type: dict[str, dict[str, object]]
         
         if not "MapObjs" in own:
             own["MapObjs"] = {}
             
+            for layer in curMap.keys():
+                own["MapObjs"][layer] = {}
+            
         mapObjs = own["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
         
-        if not all: __despawnMap(cont, curPos)
+        if not all:
+            __despawnMap(cont, curPos)
+            
         __spawnActors(cont, curPos, all=all)
         
         for layer in curMap.keys():
@@ -191,7 +197,7 @@ def __spawnMap(cont, curPos, all=False):
             for coord in curMap[layer].keys():
                 curTile = curMap[layer][coord]
                 
-                if all or __isPositionBetween(curPos, coord):
+                if all or __isPositionBetween(curPos, coord) and not coord in mapObjs[layer].keys():
                     coord3d = coord + tuple([height])
                     obj = own.scene.addObject(curTile["Name"]) # type: KX_GameObject
                     __setTile(obj, curTile, coord3d)
