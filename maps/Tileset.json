@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":26,
+ "tilecount":27,
  "tiledversion":"1.7.2",
  "tileheight":16,
  "tiles":[
@@ -165,6 +165,12 @@
         {
          "id":65,
          "image":"tiles\/FenceDoor1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":66,
+         "image":"tiles\/Door2.png",
          "imageheight":16,
          "imagewidth":16
         }],
