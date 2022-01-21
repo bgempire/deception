@@ -38,15 +38,15 @@ def main(cont):
             own["Timer"] = -1
 
 
-def __despawnMap(cont, curPos, all=False):
-    # type: (SCA_PythonController, list[int], bool) -> None
+def __despawnMap(cont, curPos):
+    # type: (SCA_PythonController, list[int]) -> None
     
     own = cont.owner
     mapObjs = own["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
     
     for layer in mapObjs.keys():
         for coord in list(mapObjs[layer].keys()):
-            if all or not __isPositionBetween(curPos, coord):
+            if not __isPositionBetween(curPos, coord):
                 mapObjs[layer][coord].endObject()
                 del mapObjs[layer][coord]
 
@@ -123,7 +123,7 @@ def __spawnActors(cont, curPos, all=False):
     from math import radians
     
     own = cont.owner
-    curMap = own["CurMap"] # type: dict[str, object]
+    curMap = own["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
     
     if not "MapActors" in own:
         own["MapActors"] = {}
@@ -145,21 +145,18 @@ def __spawnActors(cont, curPos, all=False):
             
             if all or __isPositionBetween(curPos, coord):
                 coord3d = coord + tuple([height])
-                coord3d = (coord3d[0] * 2, -coord3d[1] * 2, coord3d[2])
                 setPlayer = curTile["Name"] == "Player" and not own["PlayerSet"]
                 
                 if setPlayer and own.scene.get("Player"):
                     obj = own.scene["Player"] # type: KX_GameObject
-                    obj.worldPosition = coord3d
-                    obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
+                    __setTile(obj, curTile, coord3d)
                     obj.worldPosition.z += 1
                     obj.scene["MapPosition"] = __getMapPosition(obj)
                     own["PlayerSet"] = True
                     
                 elif curTile["Name"] != "Player":
                     obj = own.scene.addObject(curTile["Name"]) # type: KX_GameObject
-                    obj.worldPosition = coord3d
-                    obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
+                    __setTile(obj, curTile, coord3d)
                     mapActors[layer][coord] = obj
 
 
@@ -177,9 +174,10 @@ def __spawnMap(cont, curPos, all=False):
             own["MapObjs"] = {}
             
         mapObjs = own["MapObjs"] # type: dict[str, dict[tuple, KX_GameObject]]
-        __despawnMap(cont, curPos, all=all)
+        
+        if not all: __despawnMap(cont, curPos)
         __spawnActors(cont, curPos, all=all)
-            
+        
         for layer in curMap.keys():
             
             if layer.lower().startswith("actor"):
@@ -195,12 +193,8 @@ def __spawnMap(cont, curPos, all=False):
                 
                 if all or __isPositionBetween(curPos, coord):
                     coord3d = coord + tuple([height])
-                    coord3d = (coord3d[0] * 2, -coord3d[1] * 2, coord3d[2])
                     obj = own.scene.addObject(curTile["Name"]) # type: KX_GameObject
-                    obj.worldPosition = coord3d
-                    obj.worldPosition.x += curTile["Offset"][0] * 2
-                    obj.worldPosition.y += -curTile["Offset"][1] * 2
-                    obj.worldOrientation = [0, 0, radians(-curTile["Rotation"])]
+                    __setTile(obj, curTile, coord3d)
                     mapObjs[layer][coord] = obj
                     
         own["LastPosition"] = curPos
@@ -221,3 +215,15 @@ def __getMapPosition(obj):
         int(((obj.worldPosition.x // 10) * 10) + 5), 
         -int(((obj.worldPosition.y // 10) * 10) + 5), 
     )
+
+
+def __setTile(obj, tile, coord3d):
+    # type: (KX_GameObject, dict[str, object], tuple[int]) -> None
+    
+    from math import radians
+    
+    obj.worldPosition = coord3d
+    obj.worldPosition.x += tile["Offset"][0]
+    obj.worldPosition.y += -tile["Offset"][1]
+    obj.worldOrientation = [0, 0, radians(-tile["Rotation"])]
+

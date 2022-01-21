@@ -8,6 +8,8 @@ maps = {} # type: dict[str, dict[str, object]]
 __tilesetRaw = {} # type: dict[str, object]
 __mapsRaw = {} # type: dict[str, dict[str, object]]
 
+TILE_REAL_SIZE = 2 # meters
+
 
 def load():
     # type: () -> None
@@ -33,34 +35,29 @@ def __getMaps():
     for map_ in __mapsRaw.keys():
         sourceMap = __mapsRaw[map_]
         targetMap = {}
-        tileWidth = sourceMap["tilewidth"]
-        tileHeight = sourceMap["tileheight"]
         
         for layer in sourceMap["layers"]:
-            curLayer = {}
-            offsetX = layer.get("offsetx", 0) / tileWidth
-            offsetY = layer.get("offsety", 0) / tileHeight
-            mapHeight = sourceMap["height"]
-            mapWidth = sourceMap["width"]
-            rangeX = range(max(mapWidth, mapHeight))
-            rangeY = range(min(mapWidth, mapHeight))
+            layer = layer # type: dict[str, object]
+            curLayer = {} # type: dict[tuple[int], dict[str, object]]
+            offset = (
+                layer.get("offsetx", 0) / sourceMap["tilewidth"] * TILE_REAL_SIZE, 
+                layer.get("offsety", 0) / sourceMap["tileheight"] * TILE_REAL_SIZE,
+            ) # type: tuple[float]
+            mapHeight = sourceMap["height"] # type: int
+            mapWidth = sourceMap["width"] # type: int
             
-            for x in rangeX:
-                for y in rangeY:
-                    tileIndex = y % mapHeight if mapHeight < mapWidth else y % mapWidth
-                    tileIndex =  (x * mapHeight) + tileIndex
+            for y in range(mapWidth):
+                for x in range(mapHeight):
+                    tileIndex =  (y * mapHeight) + (x % mapWidth)
                     curTile = layer["data"][tileIndex] - 1
                     
                     if curTile > 0:
-                        mapTile = __getMapTile(curTile, (offsetX, offsetY))
+                        mapTile = __getMapTile(curTile, offset)
                         
                         if mapTile != None:
-                            tilePosX = x if mapHeight > mapWidth else y
-                            tilePosY = y if mapHeight > mapWidth else x
-                            tilePos = (tilePosX, tilePosY)
-                                
+                            tilePos = (x * TILE_REAL_SIZE, -y * TILE_REAL_SIZE)
                             curLayer[tilePos] = mapTile
-                    
+                            
             targetMap[layer["name"]] = curLayer
                     
         maps[map_] = targetMap
