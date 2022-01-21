@@ -12,6 +12,7 @@ MOVE_RUN_MULTIPLIER = 2.2
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 5.0
 FLASHLIGHT_BATTERY_DRAIN = 0.0001
+USE_DISTANCE = 2.0 # meters
 DEFAULT_PROPS = {
     "Run": False,
     "MoveH": 0,
@@ -148,7 +149,11 @@ def __use(cont):
     own = cont.owner
     camera = own.scene.active_camera
     
-    hitObject = camera.getScreenRay(0.5, 0.5, 1)
+    hitObject = camera.getScreenRay(0.5, 0.5, USE_DISTANCE)
     
     if hitObject:
-        hitObject.playAction("Door", 0, 28)
+        
+        if "Door" in hitObject:
+            vect = (hitObject.parent.localPosition - own.localPosition) * hitObject.parent.localOrientation # type: Vector
+            hitObject["Use"] = True
+            hitObject["Direction"] = 1 if vect.y >= 0 else 2
