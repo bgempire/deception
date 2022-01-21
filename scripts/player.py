@@ -156,4 +156,6 @@ def __use(cont):
         if "Door" in hitObject:
             vect = (hitObject.parent.localPosition - own.localPosition) * hitObject.parent.localOrientation # type: Vector
             hitObject["Use"] = True
-            hitObject["Direction"] = 1 if vect.y >= 0 else 2
+            
+            if not hitObject["Opened"]:
+                hitObject["Direction"] = 1 if vect.y >= 0 else 2
