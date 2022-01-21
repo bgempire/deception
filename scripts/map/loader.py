@@ -46,18 +46,18 @@ def __getMaps():
             mapHeight = sourceMap["height"] # type: int
             mapWidth = sourceMap["width"] # type: int
             
-            for y in range(mapWidth):
-                for x in range(mapHeight):
-                    tileIndex =  (y * mapHeight) + (x % mapWidth)
-                    curTile = layer["data"][tileIndex] - 1
+            for tileIndex in range(mapWidth * mapHeight):
+                x = tileIndex % mapWidth
+                y = tileIndex // mapWidth
+                curTile = layer["data"][tileIndex] - 1
+                
+                if curTile > 0:
+                    mapTile = __getMapTile(curTile, offset)
                     
-                    if curTile > 0:
-                        mapTile = __getMapTile(curTile, offset)
+                    if mapTile != None:
+                        tilePos = (x * TILE_REAL_SIZE, -y * TILE_REAL_SIZE)
+                        curLayer[tilePos] = mapTile
                         
-                        if mapTile != None:
-                            tilePos = (x * TILE_REAL_SIZE, -y * TILE_REAL_SIZE)
-                            curLayer[tilePos] = mapTile
-                            
             targetMap[layer["name"]] = curLayer
                     
         maps[map_] = targetMap
