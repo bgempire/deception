@@ -114,7 +114,7 @@ def __setCurPosFromCamera(cont):
     curPos = __getMapPosition(camera)
     own.scene["MapPosition"] = curPos
     own["MapPositionStr"] = str(curPos)
-    own["CurPos"] = str(tuple(map(round, [camera.worldPosition.x, -camera.worldPosition.y])))
+    own["CurPos"] = str(tuple(map(round, (camera.worldPosition.x, camera.worldPosition.y))))
 
 
 def __spawnActors(cont, curPos, all=False):
@@ -213,7 +213,7 @@ def __getMapPosition(obj):
     
     return (
         int(((obj.worldPosition.x // 10) * 10) + 5), 
-        -int(((obj.worldPosition.y // 10) * 10) + 5), 
+        int(((obj.worldPosition.y // 10) * 10) + 5), 
     )
 
 
