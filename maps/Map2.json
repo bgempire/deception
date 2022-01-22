@@ -1,4 +1,12 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "chunksize":
+        {
+         "height":20,
+         "width":20
+        }
+    },
  "height":8,
  "infinite":false,
  "layers":[
@@ -19,8 +27,8 @@
          "height":8,
          "id":2,
          "name":"Walls",
-         "offsetx":-8,
-         "offsety":-8,
+         "offsetx":-10,
+         "offsety":-10,
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -45,13 +53,13 @@
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.7.2",
- "tileheight":16,
+ "tileheight":20,
  "tilesets":[
         {
          "firstgid":1,
          "source":"Tileset.json"
         }],
- "tilewidth":16,
+ "tilewidth":20,
  "type":"map",
  "version":"1.6",
  "width":8
