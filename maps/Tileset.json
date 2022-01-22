@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":27,
+ "tilecount":30,
  "tiledversion":"1.7.2",
  "tileheight":16,
  "tiles":[
@@ -171,6 +171,24 @@
         {
          "id":66,
          "image":"tiles\/Door2.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":67,
+         "image":"tiles\/Sofa1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":68,
+         "image":"tiles\/Closet1.png",
+         "imageheight":16,
+         "imagewidth":16
+        }, 
+        {
+         "id":69,
+         "image":"tiles\/Bed1.png",
          "imageheight":16,
          "imagewidth":16
         }],
