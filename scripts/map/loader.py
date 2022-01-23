@@ -15,7 +15,7 @@ def load():
     # type: () -> None
     """ Initialize map loader. """
     
-    from ..bgf import curPath, loadFile, loadFiles
+    from ..bgf import curPath, loadFile, loadFiles, dump
     
     global __tilesetRaw, __mapsRaw, maps, tileset
     __tilesetRaw = loadFile(curPath / "maps/Tileset.json")
