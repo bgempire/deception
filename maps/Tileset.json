@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":54,
+ "tilecount":58,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
@@ -33,6 +33,30 @@
         {
          "id":43,
          "image":"tiles\/Grass1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":95,
+         "image":"tiles\/TrailStraight1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":94,
+         "image":"tiles\/TrailCorner1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":97,
+         "image":"tiles\/TrailEnd1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":98,
+         "image":"tiles\/TrailThree1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
