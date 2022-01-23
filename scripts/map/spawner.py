@@ -95,6 +95,8 @@ def __init(cont):
         if DEBUG: own.addDebugProperty(key, True)
         
     own["CurMap"] = __getMap(cont)
+    
+    __setPlayer(cont)
         
     print("> Map initializated")
 
@@ -118,6 +120,42 @@ def __setCurPosFromCamera(cont):
     own["CurPos"] = str(tuple(map(round, (camera.worldPosition.x, camera.worldPosition.y))))
 
 
+def __setPlayer(cont):
+    # type: (SCA_PythonController) -> None
+    
+    own = cont.owner
+    
+    if not own["PlayerSet"]:
+        coord, curTile, height = __getPlayerFromMap(cont)
+        
+        if coord and curTile:
+            obj = own.scene.get("Player") # type: KX_GameObject
+            
+            if obj:
+                coord3d = coord + tuple([height])
+                __setTile(obj, curTile, coord3d)
+                obj.worldPosition.z += 1
+                obj.scene["MapPosition"] = __getMapPosition(obj)
+                own["PlayerSet"] = True
+        
+
+def __getPlayerFromMap(cont):
+    # type: (SCA_PythonController) -> tuple[tuple[int], dict[str, object], str]
+    
+    own = cont.owner
+    curMap = own["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
+    
+    for layer in curMap.keys():
+        if "actor" in layer.lower():
+            for coord in curMap[layer].keys():
+                curTile = curMap[layer][coord]
+                
+                if curTile["Name"] == "Player":
+                    return [coord, curTile, __getHeightFromLayer(layer)]
+                    
+    return [None, None, None]
+
+
 def __spawnActors(cont, curPos, all=False):
     # type: (SCA_PythonController, list[int], bool) -> None
     
@@ -133,7 +171,7 @@ def __spawnActors(cont, curPos, all=False):
     
     for layer in curMap.keys():
         
-        if not layer.lower().startswith("actor"):
+        if not "actor" in layer.lower():
             continue
         
         height = __getHeightFromLayer(layer)
@@ -144,14 +182,6 @@ def __spawnActors(cont, curPos, all=False):
         for coord in curMap[layer].keys():
             curTile = curMap[layer][coord]
             coord3d = coord + tuple([height])
-            setPlayer = curTile["Name"] == "Player" and not own["PlayerSet"]
-                
-            if setPlayer and own.scene.get("Player"):
-                obj = own.scene["Player"] # type: KX_GameObject
-                __setTile(obj, curTile, coord3d)
-                obj.worldPosition.z += 1
-                obj.scene["MapPosition"] = __getMapPosition(obj)
-                own["PlayerSet"] = True
             
             if all or __isPositionBetween(curPos, coord):
                     
