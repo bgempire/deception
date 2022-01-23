@@ -8,10 +8,16 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":33,
+ "tilecount":44,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
+        {
+         "id":58,
+         "image":"tiles\/Player.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
         {
          "id":40,
          "image":"tiles\/Asphalt1.png",
@@ -103,26 +109,86 @@
          "imagewidth":20
         }, 
         {
-         "id":55,
-         "image":"tiles\/Window1.png",
-         "imageheight":20,
-         "imagewidth":20
-        }, 
-        {
          "id":50,
          "image":"tiles\/WallDoor1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
-         "id":42,
-         "image":"tiles\/Door1.png",
+         "id":76,
+         "image":"tiles\/WallStraight2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
-         "id":58,
-         "image":"tiles\/Player.png",
+         "id":73,
+         "image":"tiles\/WallCorner2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":77,
+         "image":"tiles\/WallThree2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":75,
+         "image":"tiles\/WallFour2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":78,
+         "image":"tiles\/WallWindow2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":74,
+         "image":"tiles\/WallDoor2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":81,
+         "image":"tiles\/WallStraight3.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":79,
+         "image":"tiles\/WallCorner3.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":82,
+         "image":"tiles\/WallThree3.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":83,
+         "image":"tiles\/WallWindow3.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":80,
+         "image":"tiles\/WallDoor3.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":55,
+         "image":"tiles\/Window1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":42,
+         "image":"tiles\/Door1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
