@@ -11,7 +11,7 @@ MOVE_SPEED_FACTOR = 0.035
 MOVE_RUN_MULTIPLIER = 2.2
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 5.0
-FLASHLIGHT_BATTERY_DRAIN = 0.0001
+FLASHLIGHT_BATTERY_DRAIN = 0.0000 # Default: 0.0001
 USE_DISTANCE = 2.0 # meters
 DEFAULT_PROPS = {
     "Run": False,
@@ -159,3 +159,4 @@ def __use(cont):
             
             if not hitObject["Opened"]:
                 hitObject["Direction"] = 1 if vect.y >= 0 else 2
+
