@@ -7,7 +7,7 @@ from mathutils import Vector
 
 
 DEBUG = 1
-MOVE_SPEED_FACTOR = 0.035
+MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 5.0
@@ -140,7 +140,7 @@ def __move(cont):
     
     runFactor = MOVE_RUN_MULTIPLIER if own["Run"] else 1.0
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
-    own.applyMovement(moveVector, True)
+    own.localLinearVelocity = moveVector
 
 
 def __use(cont):
