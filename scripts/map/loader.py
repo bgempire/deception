@@ -45,10 +45,10 @@ def __getMaps():
                 
             elif layer["type"] == "group":
                 for subLayer in layer["layers"]:
-                    if layer["type"] == "tilelayer":
+                    if subLayer["type"] == "tilelayer":
                         targetMap[layer["name"] + "/" + subLayer["name"]] = __getTileLayer(subLayer, sourceMap)
                     
-                    if layer["type"] == "objectgroup":
+                    elif subLayer["type"] == "objectgroup":
                         targetMap[layer["name"] + "/" + subLayer["name"]] = __getObjectLayer(subLayer, sourceMap)
                     
         maps[mapName] = targetMap
