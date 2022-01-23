@@ -140,6 +140,7 @@ def __move(cont):
     
     runFactor = MOVE_RUN_MULTIPLIER if own["Run"] else 1.0
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
+    moveVector.z = own.localLinearVelocity.z
     own.localLinearVelocity = moveVector
 
 
