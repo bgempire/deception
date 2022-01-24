@@ -34,8 +34,11 @@ def door(cont):
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
             
             for prop in DEFAULT_PROPS.keys():
+                
                 own[prop] = DEFAULT_PROPS[prop]
                 if DEBUG: own.addDebugProperty(prop)
+                
+            __getEventFromMap(cont, DEBUG)
             
         animName = "Open" if not own["Opened"] else "Close"
         curAnim = ANIMS[animName + str(own["Direction"])]
@@ -63,9 +66,7 @@ def door(cont):
 
 def container(cont):
     # type: (SCA_PythonController) -> None
-    """ Generic behavior for any item container such as drawers, wardrobes, boxes, etc. """
-    
-    from .map.spawner import getCurrentMap
+    """ Generic behavior for any item container such as drawers, closets, boxes, etc. """
     
     DEBUG = 1
     DEFAULT_PROPS = {
@@ -85,8 +86,39 @@ def container(cont):
                 own[prop] = DEFAULT_PROPS[prop]
                 if DEBUG: own.addDebugProperty(prop)
                 
-        curMap = getCurrentMap(cont)
+            __getEventFromMap(cont, DEBUG)
+            
+        pass
+
+
+def __getEventFromMap(cont, debug=False):
+    # type: (SCA_PythonController, bool) -> None
+    """ Get event from map at current object coordinates. """
+    
+    from .bgf import getUpmostParent
+    from .map.spawner import getCurrentMap
+    
+    own = cont.owner
+    curMap = getCurrentMap(cont)  
+    parent = getUpmostParent(own)
+    
+    eventsLayer = own.scene.get("EventsLayer") # type: dict[tuple[int], dict[str, object]]
+    
+    if not eventsLayer:
         
-        if curMap:
-            pass
+        for layer in curMap.keys():
+            if "event" in layer.lower():
+                own.scene["EventsLayer"] = eventsLayer = curMap[layer]
+                break
+                
+    if curMap and eventsLayer and "Position" in parent:
+        curPos = parent["Position"]
+        
+        if eventsLayer.get(curPos):
+            event = eventsLayer[curPos] # type: dict[str, object]
+            
+            for prop in event.get("Properties", {}).keys():
+                own[prop] = event["Properties"][prop]
+                if debug: own.addDebugProperty(prop)
+                
 
