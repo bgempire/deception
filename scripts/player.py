@@ -6,7 +6,7 @@ from .bgf import config, isKeyPressed
 from mathutils import Vector
 
 
-DEBUG = 1
+DEBUG = 0
 MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
 FLASHLIGHT_MOVE_SMOOTH = 15.0
@@ -68,7 +68,7 @@ def __init(cont):
     own.scene["Player"] = own
     
     global DEBUG
-    DEBUG = own.groupObject.get("Debug", False) if own.groupObject else False
+    DEBUG = own.groupObject.get("Debug") if own.groupObject else DEBUG
     
     for key in DEFAULT_PROPS.keys():
         own[key] = DEFAULT_PROPS[key]
