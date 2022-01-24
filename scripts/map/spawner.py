@@ -227,7 +227,7 @@ def __spawnMap(cont, curPos, all=False):
         
         for layer in curMap.keys():
             
-            if layer.lower().startswith("actor"):
+            if "actor" in layer.lower() or "event" in layer.lower():
                 continue
             
             height = __getHeightFromLayer(layer)
@@ -270,7 +270,7 @@ def __setTile(obj, tile, coord3d):
     from math import radians
     
     obj.worldPosition = coord3d
-    obj.worldPosition.x += tile["Offset"][0]
-    obj.worldPosition.y += -tile["Offset"][1]
-    obj.worldOrientation = [0, 0, radians(-tile["Rotation"])]
+    obj.worldPosition.x += tile.get("Offset", (0, 0))[0]
+    obj.worldPosition.y += -tile.get("Offset", (0, 0))[1]
+    obj.worldOrientation = [0, 0, radians(-tile.get("Rotation", 0))]
 

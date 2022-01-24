@@ -96,23 +96,29 @@ def __getObjectLayer(layer, sourceMap):
         layer.get("offsety", 0) / sourceMap["tileheight"] * TILE_REAL_SIZE,
     ) # type: tuple[float]
     objects = layer["objects"] # type: list[dict[str, object]]
-    properties = __getProperties(layer)
+    layerProps = __getProperties(layer)
     
     for obj in objects:
+        
         if obj.get("template"):
             obj = __getObjectFromTemplate(obj)
+            
         tilePos = (
             obj["x"] // sourceMap["tilewidth"] * TILE_REAL_SIZE, 
             -obj["y"] // sourceMap["tileheight"] * TILE_REAL_SIZE,
         ) # type: tuple[int]
+        
         curObj = {
-            "Id": obj["id"],
             "Name": obj["name"],
-            "Rotation": obj["rotation"],
-            "Offset": offset,
         }
-        curObj.update(properties)
-        curObj.update(__getProperties(obj))
+        
+        objProps = {}
+        objProps.update(layerProps)
+        objProps.update(__getProperties(obj))
+        
+        if objProps:
+            curObj["Properties"] = objProps
+            
         curLayer[tilePos] = curObj
                 
     return curLayer
@@ -150,21 +156,33 @@ def __getMapTile(tileId, offset=(0.0, 0.0), properties={}):
     
     tileBin = bin(tileId)[2:].replace("b", "").zfill(32)
     rotBits = tileBin[0:3]
+    tileId = int(tileBin[3:], 2)
     
     data = {
-        "Id" : int(tileBin[3:], 2),
-        "Rotation" : 0,
         "Name" : "",
-        "Offset": offset
     }
-    data.update(properties)
     
-    if rotBits == "101": data["Rotation"] = 90
-    elif rotBits == "110": data["Rotation"] = 180
-    elif rotBits == "011": data["Rotation"] = 270
+    if offset[0] and offset[1]:
+        data["Offset"] = offset
     
-    if data["Id"] in tileset.keys():
-        data.update(tileset[data["Id"]])
+    if properties:
+        data["Properties"] = properties
+    
+    # Set tile rotation
+    tileRotation = 0
+    
+    if rotBits == "101":
+        tileRotation = 90
+    elif rotBits == "110":
+        tileRotation = 180
+    elif rotBits == "011":
+        tileRotation = 270
+    
+    if tileRotation:
+        data["Rotation"] = tileRotation
+    
+    if tileId in tileset.keys():
+        data.update(tileset[tileId])
         return data
 
 
