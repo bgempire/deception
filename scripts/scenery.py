@@ -61,3 +61,32 @@ def door(cont):
             own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED)
 
 
+def container(cont):
+    # type: (SCA_PythonController) -> None
+    """ Generic behavior for any item container such as drawers, wardrobes, boxes, etc. """
+    
+    from .map.spawner import getCurrentMap
+    
+    DEBUG = 1
+    DEFAULT_PROPS = {
+        "Use": False,
+        "Item": "",
+        "Taken": False,
+    }
+    
+    own = cont.owner
+    always = cont.sensors["Always"] # type: SCA_AlwaysSensor
+    
+    if always.positive:
+        
+        if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
+            
+            for prop in DEFAULT_PROPS.keys():
+                own[prop] = DEFAULT_PROPS[prop]
+                if DEBUG: own.addDebugProperty(prop)
+                
+        curMap = getCurrentMap(cont)
+        
+        if curMap:
+            pass
+
