@@ -10,6 +10,8 @@ DEBUG = 0
 TIMER_INCREMENT = 1 / 60
 MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
+MOVE_STAMINA_DRAIN = 0.001
+MOVE_STAMINA_RUN_BIAS = 0.05
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 5.0
 FLASHLIGHT_BATTERY_DRAIN = 0.0000 # Default: 0.0001
@@ -23,6 +25,7 @@ DEFAULT_PROPS = {
     "FlashlightBattery": 1.0,
     "Ground": "",
     "TimerSteps": 0.0,
+    "Stamina": 1.0,
 }
 
 
@@ -143,7 +146,7 @@ def __move(cont):
     
     own = cont.owner
     
-    runFactor = MOVE_RUN_MULTIPLIER if own["Run"] else 1.0
+    runFactor = MOVE_RUN_MULTIPLIER if own["Run"] and own["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1.0
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
     
     onGround = own.rayCast(own.worldPosition + Vector([0, 0, -1]), own, 1)
@@ -159,6 +162,20 @@ def __move(cont):
         own["Ground"] = ""
         
     own.localLinearVelocity = moveVector
+    
+    isMoving = own["MoveH"] or own["MoveV"]
+    
+    # Drain stamina when running
+    if isMoving and own["Run"] and own["Stamina"] > 0:
+        own["Stamina"] -= MOVE_STAMINA_DRAIN
+        
+    # Recover stamina when walking
+    elif isMoving and own["Stamina"] < 1:
+        own["Stamina"] += MOVE_STAMINA_DRAIN * 0.5
+        
+    # Recover stamina fast when stopped
+    elif not isMoving and own["Stamina"] < 1:
+        own["Stamina"] += MOVE_STAMINA_DRAIN * 1.5
 
 
 def __use(cont):
@@ -189,19 +206,20 @@ def __sound(cont):
     own = cont.owner
     
     own["TimerSteps"] += TIMER_INCREMENT
-    
-    # Play sounds when moving
-    if (own["MoveH"] or own["MoveV"]):
         
-        # Panting sound when running
-        if own["Run"] and (not "Panting" in own or own["Panting"] and own["Panting"].status == aud.AUD_STATUS_INVALID):
+    # Panting sound when stamina is low
+    if own["Stamina"] <= 0.5:
+        if not "Panting" in own or own["Panting"] and own["Panting"].status == aud.AUD_STATUS_INVALID:
             handle = playSound("VoiceFemalePanting1")
             handle.volume *= 0.25
             own["Panting"] = handle
+    
+    # Play sounds when moving
+    if (own["MoveH"] or own["MoveV"]):
             
         # Step sounds
         if own["TimerSteps"] >= 0 and own["Ground"]:
-            runFactor = 1.8 if own["Run"] else 1
+            runFactor = 1.8 if own["Run"] and own["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1
             
             own["TimerSteps"] = -SOUND_STEPS_INTERVAL / runFactor
             
