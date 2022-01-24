@@ -39,6 +39,39 @@ def main(cont):
             own["Timer"] = -1
 
 
+def getCurrentMap(cont, spawnerObj=None):
+    # type: (SCA_PythonController, KX_GameObject) -> dict[str, dict[tuple, dict]]
+    
+    import sys
+    from pathlib import Path
+    from .loader import maps
+    
+    own = cont.owner
+    currentMap = {}
+    
+    # Get map from map spawner object
+    if spawnerObj:
+        
+        if "-" in sys.argv:
+            path = Path(sys.argv[-1])
+            
+            if path.exists():
+                currentMap = maps[path.stem]
+        
+        elif "Map" in own.groupObject and own.groupObject["Map"] in maps.keys():
+            currentMap = maps[own.groupObject["Map"]]
+            
+        else:
+            for key in maps.keys():
+                currentMap = maps[key]
+                
+    # Get existing map from scene
+    elif "CurMap" in own.scene:
+        currentMap = own.scene["CurMap"]
+            
+    return currentMap
+
+
 def __despawnMap(cont, curPos):
     # type: (SCA_PythonController, list[int]) -> None
     
@@ -61,28 +94,6 @@ def __getHeightFromLayer(layer):
     return literal_eval(layerSplit[1]) if len(layerSplit) == 2 else 0
 
 
-def __getMap(cont):
-    # type: (SCA_PythonController) -> dict[str, dict[tuple, dict]]
-    
-    import sys
-    from pathlib import Path
-    from .loader import maps
-    
-    own = cont.owner
-    
-    if "-" in sys.argv:
-        path = Path(sys.argv[-1])
-        
-        if path.exists():
-            return maps[path.stem]
-    
-    if "Map" in own.groupObject and own.groupObject["Map"] in maps.keys():
-        return maps[own.groupObject["Map"]]
-    else:
-        for key in maps.keys():
-            return maps[key]
-
-
 def __init(cont):
     # type: (SCA_PythonController) -> None
     
@@ -94,7 +105,7 @@ def __init(cont):
         own[key] = DEFAULT_PROPS[key]
         if DEBUG: own.addDebugProperty(key, True)
         
-    own["CurMap"] = __getMap(cont)
+    own.scene["CurMap"] = getCurrentMap(cont, spawnerObj=own)
     
     __setPlayer(cont)
         
@@ -143,7 +154,7 @@ def __getPlayerFromMap(cont):
     # type: (SCA_PythonController) -> tuple[tuple[int], dict[str, object], str]
     
     own = cont.owner
-    curMap = own["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
+    curMap = own.scene["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
     
     for layer in curMap.keys():
         if "actor" in layer.lower():
@@ -162,7 +173,7 @@ def __spawnActors(cont, curPos, all=False):
     from math import radians
     
     own = cont.owner
-    curMap = own["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
+    curMap = own.scene["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
     
     if not "MapActors" in own:
         own["MapActors"] = {}
@@ -199,7 +210,7 @@ def __spawnMap(cont, curPos, all=False):
     own = cont.owner
     
     if curPos != own["LastPosition"] and (not all or not "MapObjs" in own):
-        curMap = own["CurMap"] # type: dict[str, dict[str, object]]
+        curMap = own.scene["CurMap"] # type: dict[str, dict[str, object]]
         
         if not "MapObjs" in own:
             own["MapObjs"] = {}
