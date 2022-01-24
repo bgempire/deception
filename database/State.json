@@ -2,5 +2,11 @@
 // Reference: https://bgempire.github.io/bgforce/variables
 
 {
-    
+    "Events": {},
+    "Player": {
+        "FlashlightBattery": 1.0,
+        "FlashlightOn": true,
+        "Inventory": [],
+        "Stamina": 1.0
+    }
 }
