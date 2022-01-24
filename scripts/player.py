@@ -181,24 +181,6 @@ def __move(cont):
         player["Stamina"] += MOVE_STAMINA_DRAIN * 1.5
 
 
-def __use(cont):
-    # type: (SCA_PythonController) -> None
-    
-    own = cont.owner
-    camera = own.scene.active_camera
-    
-    hitObject = camera.getScreenRay(0.5, 0.5, USE_DISTANCE)
-    
-    if hitObject:
-        
-        if "Door" in hitObject:
-            vect = (hitObject.parent.localPosition - own.localPosition) * hitObject.parent.localOrientation # type: Vector
-            hitObject["Use"] = True
-            
-            if not hitObject["Opened"]:
-                hitObject["Direction"] = 1 if vect.y >= 0 else 2
-
-
 def __sound(cont):
     # type: (SCA_PythonController) -> None
     
@@ -240,3 +222,21 @@ def __sound(cont):
             handle = playSound(soundName, own)
             handle.pitch = 1 + (1 / randint(8, 15) * choice((-1, 1)))
             handle.volume *= 1 if own["Run"] else 0.3
+
+
+def __use(cont):
+    # type: (SCA_PythonController) -> None
+    
+    own = cont.owner
+    camera = own.scene.active_camera
+    
+    hitObject = camera.getScreenRay(0.5, 0.5, USE_DISTANCE)
+    
+    if hitObject:
+        
+        if "Door" in hitObject:
+            vect = (hitObject.parent.localPosition - own.localPosition) * hitObject.parent.localOrientation # type: Vector
+            hitObject["Use"] = True
+            
+            if not hitObject["Opened"]:
+                hitObject["Direction"] = 1 if vect.y >= 0 else 2
