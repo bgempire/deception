@@ -6,3 +6,4 @@ __pycache__
 /Config.json
 /release
 /*.py
+*.tiled-session
