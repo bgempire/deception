@@ -68,7 +68,7 @@ def container(cont):
     # type: (SCA_PythonController) -> None
     """ Generic behavior for any item container such as drawers, closets, boxes, etc. """
     
-    DEBUG = 1
+    DEBUG = 0
     DEFAULT_PROPS = {
         "Use": False,
         "Item": "",
