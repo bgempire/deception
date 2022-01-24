@@ -23,6 +23,7 @@ DEFAULT_PROPS = {
     "MoveV": 0,
     "FlashlightOn": True,
     "FlashlightBattery": 1.0,
+    "FlashlightClick": False,
     "Ground": "",
     "TimerSteps": 0.0,
     "Stamina": 1.0,
@@ -101,6 +102,7 @@ def __inputManager(cont):
     # Turn flashlight on or off
     if isFlashlight:
         own["FlashlightOn"] = not own["FlashlightOn"]
+        own["FlashlightClick"] = True
         
     # Use aimed object
     if isUse:
@@ -206,6 +208,11 @@ def __sound(cont):
     own = cont.owner
     
     own["TimerSteps"] += TIMER_INCREMENT
+    
+    # Play flashlight click sound
+    if own["FlashlightClick"]:
+        playSound("FlashlightClick", own)
+        own["FlashlightClick"] = False
         
     # Panting sound when stamina is low
     if own["Stamina"] <= 0.5:
