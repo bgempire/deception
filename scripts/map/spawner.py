@@ -269,6 +269,7 @@ def __setTile(obj, tile, coord3d):
     
     from math import radians
     
+    obj["Position"] = coord3d[0:2]
     obj.worldPosition = coord3d
     obj.worldPosition.x += tile.get("Offset", (0, 0))[0]
     obj.worldPosition.y += -tile.get("Offset", (0, 0))[1]
