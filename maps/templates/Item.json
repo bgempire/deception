@@ -1,0 +1,24 @@
+{ "object":
+    {
+     "height":0,
+     "id":16,
+     "name":"Item",
+     "point":true,
+     "properties":[
+            {
+             "name":"Item",
+             "type":"string",
+             "value":""
+            }, 
+            {
+             "name":"Taken",
+             "type":"bool",
+             "value":false
+            }],
+     "rotation":0,
+     "type":"",
+     "visible":true,
+     "width":0
+    },
+ "type":"template"
+}

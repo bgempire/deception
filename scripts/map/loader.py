@@ -7,6 +7,7 @@ maps = {} # type: dict[str, dict[str, object]]
 
 __tilesetRaw = {} # type: dict[str, object]
 __mapsRaw = {} # type: dict[str, dict[str, object]]
+__templatesRaw = {} # type: dict[str, dict[str, object]]
 
 TILE_REAL_SIZE = 2 # meters
 
@@ -17,9 +18,10 @@ def load():
     
     from ..bgf import curPath, loadFile, loadFiles, dump
     
-    global __tilesetRaw, __mapsRaw, maps, tileset
+    global __tilesetRaw, __mapsRaw, __templatesRaw, maps, tileset
     __tilesetRaw = loadFile(curPath / "maps/Tileset.json")
     __mapsRaw = loadFiles(curPath / "maps", pattern="Map*.json")
+    __templatesRaw = loadFiles(curPath / "maps/templates", pattern="*.json")
     tileset = __getTileset()
     maps = __getMaps()
 
@@ -97,7 +99,12 @@ def __getObjectLayer(layer, sourceMap):
     properties = __getProperties(layer)
     
     for obj in objects:
-        tilePos = (obj["x"] // sourceMap["tilewidth"], obj["y"] // sourceMap["tileheight"]) # type: tuple[int]
+        if obj.get("template"):
+            obj = __getObjectFromTemplate(obj)
+        tilePos = (
+            obj["x"] // sourceMap["tilewidth"] * TILE_REAL_SIZE, 
+            -obj["y"] // sourceMap["tileheight"] * TILE_REAL_SIZE,
+        ) # type: tuple[int]
         curObj = {
             "Id": obj["id"],
             "Name": obj["name"],
@@ -110,6 +117,30 @@ def __getObjectLayer(layer, sourceMap):
                 
     return curLayer
 
+
+def __getObjectFromTemplate(obj):
+    # type: (dict[str, object]) -> dict[str, object]
+    
+    from pathlib import Path
+    from ast import literal_eval
+    global __templatesRaw
+    
+    template = Path(obj["template"]).stem
+    templateObj = literal_eval(str(__templatesRaw[template]["object"])) # type: dict[str, object]
+    
+    for key in templateObj.keys():
+        if key != "properties":
+            obj[key] = templateObj[key]
+            
+    obj["properties"] = obj.get("properties", [])
+    objProps = [prop["name"] for prop in obj.get("properties", [])]
+    
+    for prop in templateObj.get("properties", []):
+        if not prop["name"] in objProps:
+            obj["properties"].append(prop)
+            
+    return obj
+        
 
 def __getMapTile(tileId, offset=(0.0, 0.0), properties={}):
     # type: (int, tuple[float], dict[str, object]) -> dict[str, object]

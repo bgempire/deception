@@ -1,0 +1,24 @@
+{ "object":
+    {
+     "height":0,
+     "id":18,
+     "name":"Door",
+     "point":true,
+     "properties":[
+            {
+             "name":"Key",
+             "type":"string",
+             "value":""
+            }, 
+            {
+             "name":"Locked",
+             "type":"bool",
+             "value":false
+            }],
+     "rotation":0,
+     "type":"",
+     "visible":true,
+     "width":0
+    },
+ "type":"template"
+}
