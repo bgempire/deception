@@ -4,6 +4,7 @@ from bge.types import *
 
 def door(cont):
     # type: (SCA_PythonController) -> None
+    """ Generic behavior of any door. """
     
     from .bgf import playSound
     import aud
@@ -17,8 +18,10 @@ def door(cont):
         "Close2": (50, 30, bge.logic.KX_ACTION_MODE_PLAY),
     }
     DEFAULT_PROPS = {
-        "Opened": False,
         "Use": False,
+        "Opened": False,
+        "Locked": False,
+        "Key": "",
         "Direction": 1,
         "Sound": None,
     }
@@ -56,3 +59,5 @@ def door(cont):
                 
             own["Opened"] = not own["Opened"]
             own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED)
+
+
