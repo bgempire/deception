@@ -12,6 +12,7 @@ MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
 MOVE_STAMINA_DRAIN = 0.001
 MOVE_STAMINA_RUN_BIAS = 0.05
+MOVE_STAMINA_TIRED_BIAS = 0.4
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 5.0
 FLASHLIGHT_BATTERY_DRAIN = 0.0000 # Default: 0.0001
@@ -215,7 +216,7 @@ def __sound(cont):
         own["FlashlightClick"] = False
         
     # Panting sound when stamina is low
-    if own["Stamina"] <= 0.5:
+    if own["Stamina"] <= MOVE_STAMINA_TIRED_BIAS:
         if not "Panting" in own or own["Panting"] and own["Panting"].status == aud.AUD_STATUS_INVALID:
             handle = playSound("VoiceFemalePanting1")
             handle.volume *= 0.25
