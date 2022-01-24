@@ -44,7 +44,7 @@ def door(cont):
             if not own["Opened"]:
                 frame = own.getActionFrame()
                 
-                if (0 <= frame <= 5 or 30 <= frame <= 35) \
+                if (0 <= frame <= 4 or 30 <= frame <= 34) \
                 and (not own["Sound"] or own["Sound"].status == aud.AUD_STATUS_INVALID):
                     own["Sound"] = playSound("Door" + own["Type"] + "Close", own)
         
