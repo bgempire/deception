@@ -7,11 +7,13 @@ from mathutils import Vector
 
 
 DEBUG = 0
+TIMER_INCREMENT = 1 / 60
 MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 5.0
 FLASHLIGHT_BATTERY_DRAIN = 0.0000 # Default: 0.0001
+SOUND_STEPS_INTERVAL = 0.65 # seconds
 USE_DISTANCE = 2.0 # meters
 DEFAULT_PROPS = {
     "Run": False,
@@ -19,6 +21,8 @@ DEFAULT_PROPS = {
     "MoveV": 0,
     "FlashlightOn": True,
     "FlashlightBattery": 1.0,
+    "Ground": "",
+    "TimerSteps": 0.0,
 }
 
 
@@ -36,6 +40,7 @@ def main(cont):
         __mouseLook(cont)
         __move(cont)
         __flashlight(cont)
+        __sound(cont)
 
 
 def __flashlight(cont):
@@ -145,6 +150,13 @@ def __move(cont):
     
     if not onGround[0]:
         moveVector.z = own.localLinearVelocity.z
+        own["Ground"] = ""
+        
+    elif "Ground" in onGround[0]:
+        own["Ground"] = onGround[0]["Ground"]
+        
+    else:
+        own["Ground"] = ""
         
     own.localLinearVelocity = moveVector
 
@@ -166,3 +178,38 @@ def __use(cont):
             if not hitObject["Opened"]:
                 hitObject["Direction"] = 1 if vect.y >= 0 else 2
 
+
+def __sound(cont):
+    # type: (SCA_PythonController) -> None
+    
+    import aud
+    from .bgf import playSound
+    from random import choice, randint
+    
+    own = cont.owner
+    
+    own["TimerSteps"] += TIMER_INCREMENT
+    
+    # Play sounds when moving
+    if (own["MoveH"] or own["MoveV"]):
+        
+        # Panting sound when running
+        if own["Run"] and (not "Panting" in own or own["Panting"] and own["Panting"].status == aud.AUD_STATUS_INVALID):
+            handle = playSound("VoiceFemalePanting1")
+            handle.volume *= 0.25
+            own["Panting"] = handle
+            
+        # Step sounds
+        if own["TimerSteps"] >= 0 and own["Ground"]:
+            runFactor = 1.8 if own["Run"] else 1
+            
+            own["TimerSteps"] = -SOUND_STEPS_INTERVAL / runFactor
+            
+            soundName = "Step"
+            soundName += "Run" if own["Run"] else "Walk"
+            soundName += own["Ground"]
+            soundName += str(choice((1, 2)))
+            
+            handle = playSound(soundName, own)
+            handle.pitch = 1 + (1 / randint(8, 15) * choice((-1, 1)))
+            handle.volume *= 1 if own["Run"] else 0.3
