@@ -61,7 +61,6 @@ def __getMaps():
 def __getTileLayer(layer, sourceMap):
     # type: (dict[str, object], dict[str, object]) -> dict[tuple, dict[str, object]]
     
-    layer = layer # type: dict[str, object]
     curLayer = {} # type: dict[tuple[int], dict[str, object]]
     offset = (
         layer.get("offsetx", 0) / sourceMap["tilewidth"] * TILE_REAL_SIZE, 
