@@ -2,7 +2,7 @@
 
 import bge
 from bge.types import *
-from .bgf import config, isKeyPressed
+from .bgf import config, state, isKeyPressed
 from mathutils import Vector
 
 
@@ -22,12 +22,9 @@ DEFAULT_PROPS = {
     "Run": False,
     "MoveH": 0,
     "MoveV": 0,
-    "FlashlightOn": True,
-    "FlashlightBattery": 1.0,
     "FlashlightClick": False,
     "Ground": "",
     "TimerSteps": 0.0,
-    "Stamina": 1.0,
 }
 
 
@@ -52,20 +49,21 @@ def __flashlight(cont):
     # type: (SCA_PythonController) -> None
     
     own = cont.owner
+    player = state["Player"]
     _flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
     
     if _flashlight:
         _flashlight.timeOffset = FLASHLIGHT_MOVE_SMOOTH
         
-        if own["FlashlightOn"]:
+        if player["FlashlightOn"]:
             
-            if own["FlashlightBattery"] > 0:
-                own["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN
+            if player["FlashlightBattery"] > 0:
+                player["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN
                 
-            if own["FlashlightBattery"] < 0:
-                own["FlashlightBattery"] = 0.0
+            if player["FlashlightBattery"] < 0:
+                player["FlashlightBattery"] = 0.0
                 
-            _flashlight.energy = FLASHLIGHT_MAX_ENERGY * own["FlashlightBattery"]
+            _flashlight.energy = FLASHLIGHT_MAX_ENERGY * player["FlashlightBattery"]
                 
         else:
             _flashlight.energy = 0.0
@@ -89,6 +87,7 @@ def __inputManager(cont):
     # type: (SCA_PythonController) -> None
     
     own = cont.owner
+    player = state["Player"]
     
     isUp = isKeyPressed(config["KeyUp"])
     isDown = isKeyPressed(config["KeyDown"])
@@ -102,7 +101,7 @@ def __inputManager(cont):
     
     # Turn flashlight on or off
     if isFlashlight:
-        own["FlashlightOn"] = not own["FlashlightOn"]
+        player["FlashlightOn"] = not player["FlashlightOn"]
         own["FlashlightClick"] = True
         
     # Use aimed object
@@ -148,8 +147,9 @@ def __move(cont):
     # type: (SCA_PythonController) -> None
     
     own = cont.owner
+    player = state["Player"]
     
-    runFactor = MOVE_RUN_MULTIPLIER if own["Run"] and own["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1.0
+    runFactor = MOVE_RUN_MULTIPLIER if own["Run"] and player["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1.0
     moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
     
     onGround = own.rayCast(own.worldPosition + Vector([0, 0, -1]), own, 1)
@@ -169,16 +169,16 @@ def __move(cont):
     isMoving = own["MoveH"] or own["MoveV"]
     
     # Drain stamina when running
-    if isMoving and own["Run"] and own["Stamina"] > 0:
-        own["Stamina"] -= MOVE_STAMINA_DRAIN
+    if isMoving and own["Run"] and player["Stamina"] > 0:
+        player["Stamina"] -= MOVE_STAMINA_DRAIN
         
     # Recover stamina when walking
-    elif isMoving and own["Stamina"] < 1:
-        own["Stamina"] += MOVE_STAMINA_DRAIN * 0.5
+    elif isMoving and player["Stamina"] < 1:
+        player["Stamina"] += MOVE_STAMINA_DRAIN * 0.5
         
     # Recover stamina fast when stopped
-    elif not isMoving and own["Stamina"] < 1:
-        own["Stamina"] += MOVE_STAMINA_DRAIN * 1.5
+    elif not isMoving and player["Stamina"] < 1:
+        player["Stamina"] += MOVE_STAMINA_DRAIN * 1.5
 
 
 def __use(cont):
@@ -207,6 +207,7 @@ def __sound(cont):
     from random import choice, randint
     
     own = cont.owner
+    player = state["Player"]
     
     own["TimerSteps"] += TIMER_INCREMENT
     
@@ -216,7 +217,7 @@ def __sound(cont):
         own["FlashlightClick"] = False
         
     # Panting sound when stamina is low
-    if own["Stamina"] <= MOVE_STAMINA_TIRED_BIAS:
+    if player["Stamina"] <= MOVE_STAMINA_TIRED_BIAS:
         if not "Panting" in own or own["Panting"] and own["Panting"].status == aud.AUD_STATUS_INVALID:
             handle = playSound("VoiceFemalePanting1")
             handle.volume *= 0.25
@@ -227,7 +228,7 @@ def __sound(cont):
             
         # Step sounds
         if own["TimerSteps"] >= 0 and own["Ground"]:
-            runFactor = 1.8 if own["Run"] and own["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1
+            runFactor = 1.8 if own["Run"] and player["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1
             
             own["TimerSteps"] = -SOUND_STEPS_INTERVAL / runFactor
             
