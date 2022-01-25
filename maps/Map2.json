@@ -51,18 +51,6 @@
          "y":0
         }, 
         {
-         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3221225531, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-         "height":8,
-         "id":3,
-         "name":"Actors",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":8,
-         "x":0,
-         "y":0
-        }, 
-        {
          "draworder":"topdown",
          "id":5,
          "name":"Events",
@@ -95,6 +83,13 @@
                  "template":"templates\/Item.json",
                  "x":20,
                  "y":40
+                }, 
+                {
+                 "id":4,
+                 "rotation":180,
+                 "template":"templates\/Player.json",
+                 "x":59.947404575221,
+                 "y":59.9476797595345
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -103,7 +98,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":4,
+ "nextobjectid":5,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.7.2",
