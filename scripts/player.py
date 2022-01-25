@@ -240,3 +240,7 @@ def __use(cont):
             
             if not hitObject["Opened"]:
                 hitObject["Direction"] = 1 if vect.y >= 0 else 2
+                
+        elif "Container" in hitObject:
+            hitObject["Use"] = True
+
