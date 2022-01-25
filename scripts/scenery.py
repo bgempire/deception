@@ -6,7 +6,7 @@ def door(cont):
     # type: (SCA_PythonController) -> None
     """ Generic behavior of any door. """
     
-    from .bgf import playSound
+    from .bgf import state, playSound
     import aud
     
     DEBUG = 0
@@ -51,7 +51,6 @@ def door(cont):
         curAnim = ANIMS[animName]
         
         if own.isPlayingAction():
-            own["Use"] = False
             
             # Play close sound
             if not own["Opened"]:
@@ -61,17 +60,33 @@ def door(cont):
                 and (not own["Sound"] or own["Sound"].status == aud.AUD_STATUS_INVALID):
                     own["Sound"] = playSound("Door" + own["Type"] + "Close", own)
         
+        inventory = state["Player"]["Inventory"] # type: list[str]
+        canUnlock = own["Locked"] and own["Key"] in inventory
+        
         if own["Use"]:
+            own["Use"] = False
             
-            # Play open sound
-            if not own["Opened"]:
-                own["Sound"] = playSound("Door" + own["Type"] + "Open", own)
+            if not own["Locked"] or canUnlock:
                 
-            own["Opened"] = not own["Opened"]
-            own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED)
-            
-            # Add door to state
-            __addToState(cont, props=["Locked", "Opened", "Direction"])
+                # Unlock door and remove key from inventory
+                if canUnlock:
+                    own["Locked"] = False
+                    inventory.remove(own["Key"])
+                    own["Sound"] = playSound("DoorUnlocked1", own.parent)
+                
+                else:
+                    # Play open sound
+                    if not own["Opened"]:
+                        own["Sound"] = playSound("Door" + own["Type"] + "Open", own.parent)
+                        
+                    own["Opened"] = not own["Opened"]
+                    own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED)
+                    
+                    # Add door to state
+                    __addToState(cont, props=["Locked", "Opened", "Direction"])
+                
+            else:
+                own["Sound"] = playSound("DoorLocked1", own.parent)
 
 
 def container(cont):
