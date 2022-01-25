@@ -51,6 +51,7 @@ def door(cont):
         curAnim = ANIMS[animName]
         
         if own.isPlayingAction():
+            own["Use"] = False
             
             # Play close sound
             if not own["Opened"]:
@@ -82,8 +83,8 @@ def door(cont):
                     own["Opened"] = not own["Opened"]
                     own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED)
                     
-                    # Add door to state
-                    __addToState(cont, props=["Locked", "Opened", "Direction"])
+                # Add door to state
+                __addToState(cont, props=["Locked", "Opened", "Direction"])
                 
             else:
                 own["Sound"] = playSound("DoorLocked1", own.parent)

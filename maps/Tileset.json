@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":68,
+ "tilecount":70,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
@@ -417,6 +417,18 @@
         {
          "id":99,
          "image":"tiles\/LightPost1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":109,
+         "image":"tiles\/Stairs1Base.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":110,
+         "image":"tiles\/Stairs1Top.png",
          "imageheight":20,
          "imagewidth":20
         }],
