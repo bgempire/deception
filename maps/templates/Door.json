@@ -6,12 +6,22 @@
      "point":true,
      "properties":[
             {
+             "name":"Direction",
+             "type":"int",
+             "value":1
+            }, 
+            {
              "name":"Key",
              "type":"string",
              "value":""
             }, 
             {
              "name":"Locked",
+             "type":"bool",
+             "value":false
+            }, 
+            {
+             "name":"Opened",
              "type":"bool",
              "value":false
             }],
