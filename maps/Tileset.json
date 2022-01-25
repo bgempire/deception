@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":60,
+ "tilecount":67,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
@@ -109,6 +109,36 @@
          "imagewidth":20
         }, 
         {
+         "id":55,
+         "image":"tiles\/Window1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":42,
+         "image":"tiles\/Door1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":66,
+         "image":"tiles\/Door2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":106,
+         "image":"tiles\/DoorDouble1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":107,
+         "image":"tiles\/DoorDouble2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
          "id":52,
          "image":"tiles\/WallStraight1.png",
          "imageheight":20,
@@ -141,6 +171,12 @@
         {
          "id":50,
          "image":"tiles\/WallDoor1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":101,
+         "image":"tiles\/WallDoorDouble1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
@@ -181,6 +217,12 @@
          "imagewidth":20
         }, 
         {
+         "id":102,
+         "image":"tiles\/WallDoorDouble2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
          "id":81,
          "image":"tiles\/WallStraight3.png",
          "imageheight":20,
@@ -211,20 +253,56 @@
          "imagewidth":20
         }, 
         {
-         "id":55,
-         "image":"tiles\/Window1.png",
+         "id":103,
+         "image":"tiles\/WallDoorDouble3-1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
-         "id":42,
-         "image":"tiles\/Door1.png",
+         "id":104,
+         "image":"tiles\/WallDoorDouble3-2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
-         "id":66,
-         "image":"tiles\/Door2.png",
+         "id":87,
+         "image":"tiles\/WallStraight4.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":84,
+         "image":"tiles\/WallCorner4.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":88,
+         "image":"tiles\/WallThree4.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":86,
+         "image":"tiles\/WallFour4.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":89,
+         "image":"tiles\/WallWindow4.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":85,
+         "image":"tiles\/WallDoor4.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":105,
+         "image":"tiles\/WallDoorDouble4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
@@ -279,42 +357,6 @@
         {
          "id":69,
          "image":"tiles\/Bed1.png",
-         "imageheight":20,
-         "imagewidth":20
-        }, 
-        {
-         "id":87,
-         "image":"tiles\/WallStraight4.png",
-         "imageheight":20,
-         "imagewidth":20
-        }, 
-        {
-         "id":84,
-         "image":"tiles\/WallCorner4.png",
-         "imageheight":20,
-         "imagewidth":20
-        }, 
-        {
-         "id":88,
-         "image":"tiles\/WallThree4.png",
-         "imageheight":20,
-         "imagewidth":20
-        }, 
-        {
-         "id":86,
-         "image":"tiles\/WallFour4.png",
-         "imageheight":20,
-         "imagewidth":20
-        }, 
-        {
-         "id":89,
-         "image":"tiles\/WallWindow4.png",
-         "imageheight":20,
-         "imagewidth":20
-        }, 
-        {
-         "id":85,
-         "image":"tiles\/WallDoor4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
