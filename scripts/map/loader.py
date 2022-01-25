@@ -111,10 +111,16 @@ def __getObjectLayer(layer, sourceMap):
             "Name": obj["name"],
         }
         
+        if offset[0] or offset[1]:
+            curObj["Offset"] = offset
+        
         objProps = {}
         objProps.update(layerProps)
         objProps.update(__getProperties(obj))
         
+        if obj.get("rotation"):
+            curObj["Rotation"] = obj["rotation"]
+            
         if objProps:
             curObj["Properties"] = objProps
             
@@ -134,7 +140,7 @@ def __getObjectFromTemplate(obj):
     templateObj = literal_eval(str(__templatesRaw[template]["object"])) # type: dict[str, object]
     
     for key in templateObj.keys():
-        if key != "properties":
+        if key not in ("properties", "rotation"):
             obj[key] = templateObj[key]
             
     obj["properties"] = obj.get("properties", [])
