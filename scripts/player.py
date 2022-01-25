@@ -10,7 +10,7 @@ DEBUG = 0
 TIMER_INCREMENT = 1 / 60
 MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
-MOVE_STAMINA_DRAIN = 0.001
+MOVE_STAMINA_DRAIN = 0.0005
 MOVE_STAMINA_RUN_BIAS = 0.05
 MOVE_STAMINA_TIRED_BIAS = 0.4
 FLASHLIGHT_MOVE_SMOOTH = 15.0
@@ -174,11 +174,11 @@ def __move(cont):
         
     # Recover stamina when walking
     elif isMoving and player["Stamina"] < 1:
-        player["Stamina"] += MOVE_STAMINA_DRAIN * 0.5
+        player["Stamina"] += MOVE_STAMINA_DRAIN
         
     # Recover stamina fast when stopped
     elif not isMoving and player["Stamina"] < 1:
-        player["Stamina"] += MOVE_STAMINA_DRAIN * 1.5
+        player["Stamina"] += MOVE_STAMINA_DRAIN * 2
 
 
 def __sound(cont):
