@@ -78,6 +78,11 @@ def __init(cont):
     global DEBUG
     DEBUG = own.groupObject.get("Debug") if own.groupObject else DEBUG
     
+    if DEBUG:
+        light = own.scene.objects.get("Hemi") # type: KX_LightObject
+        if light:
+            light.energy = 0.5
+    
     for key in DEFAULT_PROPS.keys():
         own[key] = DEFAULT_PROPS[key]
         if DEBUG: own.addDebugProperty(key, True)
