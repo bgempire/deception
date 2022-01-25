@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":59,
+ "tilecount":60,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
@@ -99,6 +99,12 @@
         {
          "id":57,
          "image":"tiles\/Vegetation2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":100,
+         "image":"tiles\/Vegetation3.png",
          "imageheight":20,
          "imagewidth":20
         }, 
