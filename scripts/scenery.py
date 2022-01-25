@@ -78,7 +78,7 @@ def container(cont):
     # type: (SCA_PythonController) -> None
     """ Generic behavior for any item container such as drawers, closets, boxes, etc. """
     
-    from .bgf import state
+    from .bgf import state, playSound
     
     DEBUG = 0
     DEFAULT_PROPS = {
@@ -104,6 +104,7 @@ def container(cont):
             own["Use"] = False
             
             if own["Item"] and not own["Taken"]:
+                own["Sound"] = playSound("ItemPickup1", own.parent)
                 
                 # Add item to player's inventory
                 state["Player"]["Inventory"].append(own["Item"])
