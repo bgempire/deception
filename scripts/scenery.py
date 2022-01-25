@@ -51,6 +51,7 @@ def door(cont):
         curAnim = ANIMS[animName]
         
         if own.isPlayingAction():
+            own["Use"] = False
             
             # Play close sound
             if not own["Opened"]:
