@@ -1,0 +1,5 @@
+// Spawnable actors definitions
+
+{
+    "Enemy": {}
+}

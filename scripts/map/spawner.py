@@ -157,12 +157,12 @@ def __getPlayerFromMap(cont):
     curMap = own.scene["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
     
     for layer in curMap.keys():
-        if "actor" in layer.lower():
+        if "event" in layer.lower():
             for coord in curMap[layer].keys():
                 curTile = curMap[layer][coord]
                 
                 if curTile["Name"] == "Player":
-                    return [coord, curTile, __getHeightFromLayer(layer)]
+                    return [coord, curTile, curTile.get("Properties", {}).get("Height", 0)]
                     
     return [None, None, None]
 
@@ -170,7 +170,7 @@ def __getPlayerFromMap(cont):
 def __spawnActors(cont, curPos, all=False):
     # type: (SCA_PythonController, list[int], bool) -> None
     
-    from math import radians
+    from ..bgf import database
     
     own = cont.owner
     curMap = own.scene["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
@@ -182,21 +182,19 @@ def __spawnActors(cont, curPos, all=False):
     
     for layer in curMap.keys():
         
-        if not "actor" in layer.lower():
+        if not "event" in layer.lower():
             continue
-        
-        height = __getHeightFromLayer(layer)
         
         if not layer in mapActors.keys():
             mapActors[layer] = {}
             
         for coord in curMap[layer].keys():
             curTile = curMap[layer][coord]
-            coord3d = coord + tuple([height])
+            coord3d = coord + tuple([curTile.get("Height", 0)])
             
             if all or __isPositionBetween(curPos, coord):
-                    
-                if curTile["Name"] != "Player":
+                
+                if curTile["Name"] in database["Actors"].keys():
                     obj = own.scene.addObject(curTile["Name"]) # type: KX_GameObject
                     __setTile(obj, curTile, coord3d)
                     mapActors[layer][coord] = obj
@@ -227,7 +225,7 @@ def __spawnMap(cont, curPos, all=False):
         
         for layer in curMap.keys():
             
-            if "actor" in layer.lower() or "event" in layer.lower():
+            if "event" in layer.lower():
                 continue
             
             height = __getHeightFromLayer(layer)
