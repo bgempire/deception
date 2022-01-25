@@ -18,16 +18,17 @@ def door(cont):
         "Close2": (50, 30, bge.logic.KX_ACTION_MODE_PLAY),
     }
     DEFAULT_PROPS = {
-        "Use": False,
-        "Opened": False,
-        "Locked": False,
-        "Key": "",
         "Direction": 1,
+        "Key": "",
+        "Locked": False,
+        "Opened": False,
         "Sound": None,
+        "Use": False,
     }
     
     own = cont.owner
     always = cont.sensors["Always"] # type: SCA_AlwaysSensor
+    getAnimName = lambda obj: ("Open" if not obj["Opened"] else "Close") + str(obj["Direction"])
     
     if always.positive:
         
@@ -40,8 +41,14 @@ def door(cont):
                 
             __getEventFromMap(cont, DEBUG)
             
-        animName = "Open" if not own["Opened"] else "Close"
-        curAnim = ANIMS[animName + str(own["Direction"])]
+            # Start opened according to state
+            if own["Opened"]:
+                animName = getAnimName(own)
+                curAnim = ANIMS[animName]
+                own.playAction("Door", curAnim[0], curAnim[0], play_mode=curAnim[2], speed=DOOR_SPEED)
+            
+        animName = getAnimName(own)
+        curAnim = ANIMS[animName]
         
         if own.isPlayingAction():
             own["Use"] = False
@@ -62,17 +69,22 @@ def door(cont):
                 
             own["Opened"] = not own["Opened"]
             own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED)
+            
+            # Add door to state
+            __addToState(cont, props=["Locked", "Opened", "Direction"])
 
 
 def container(cont):
     # type: (SCA_PythonController) -> None
     """ Generic behavior for any item container such as drawers, closets, boxes, etc. """
     
+    from .bgf import state
+    
     DEBUG = 0
     DEFAULT_PROPS = {
-        "Use": False,
         "Item": "",
         "Taken": False,
+        "Use": False,
     }
     
     own = cont.owner
@@ -88,14 +100,24 @@ def container(cont):
                 
             __getEventFromMap(cont, DEBUG)
             
-        pass
+        if own["Use"]:
+            own["Use"] = False
+            
+            if own["Item"] and not own["Taken"]:
+                
+                # Add item to player's inventory
+                state["Player"]["Inventory"].append(own["Item"])
+                own["Taken"] = True
+                
+                # Add container to state
+                __addToState(cont, props=["Taken", "Item"])
 
 
 def __getEventFromMap(cont, debug=False):
     # type: (SCA_PythonController, bool) -> None
     """ Get event from map at current object coordinates. """
     
-    from .bgf import getUpmostParent
+    from .bgf import state, getUpmostParent
     from .map.spawner import getCurrentMap
     
     own = cont.owner
@@ -103,6 +125,7 @@ def __getEventFromMap(cont, debug=False):
     parent = getUpmostParent(own)
     
     eventsLayer = own.scene.get("EventsLayer") # type: dict[tuple[int], dict[str, object]]
+    eventsState = state["Events"] # type: dict[tuple[int], dict[str, object]]
     
     if not eventsLayer:
         
@@ -111,7 +134,7 @@ def __getEventFromMap(cont, debug=False):
                 own.scene["EventsLayer"] = eventsLayer = curMap[layer]
                 break
                 
-    if curMap and eventsLayer and "Position" in parent:
+    if curMap and eventsLayer:
         curPos = parent["Position"]
         
         if eventsLayer.get(curPos):
@@ -120,5 +143,31 @@ def __getEventFromMap(cont, debug=False):
             for prop in event.get("Properties", {}).keys():
                 own[prop] = event["Properties"][prop]
                 if debug: own.addDebugProperty(prop)
-                
+        
+        if eventsState.get(curPos):
+            event = eventsState[curPos] # type: dict[str, object]
+            
+            for prop in event.keys():
+                own[prop] = event[prop]
+                if debug: own.addDebugProperty(prop)
+
+
+def __addToState(cont, props=[]):
+    # type: (SCA_PythonController, list[str]) -> None
+    """ Add object properties to state. """
+    
+    from .bgf import state, getUpmostParent
+    
+    own = cont.owner
+    parent = getUpmostParent(own)
+    PROP_VALID_TYPES = (int, float, tuple, list, bool, str)
+    
+    event = {}
+    
+    for prop in own.getPropertyNames():
+        
+        if (not props or prop in props) and type(own[prop]) in PROP_VALID_TYPES:
+            event[prop] = own[prop]
+    
+    state["Events"][parent["Position"]] = event
 
