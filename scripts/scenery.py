@@ -59,7 +59,7 @@ def door(cont):
                 
                 if (0 <= frame <= 4 or 30 <= frame <= 34) \
                 and (not own["Sound"] or own["Sound"].status == aud.AUD_STATUS_INVALID):
-                    own["Sound"] = playSound("Door" + own["Type"] + "Close", own)
+                    own["Sound"] = playSound("Door" + own["Type"] + "Close", own.parent)
         
         inventory = state["Player"]["Inventory"] # type: list[str]
         canUnlock = own["Locked"] and own["Key"] in inventory
@@ -73,7 +73,7 @@ def door(cont):
                 if canUnlock:
                     own["Locked"] = False
                     inventory.remove(own["Key"])
-                    own["Sound"] = playSound("DoorUnlocked1", own.parent)
+                    own["Sound"] = playSound("Door" + own["Type"] + "Unlocked", own.parent)
                 
                 else:
                     # Play open sound
@@ -87,7 +87,7 @@ def door(cont):
                 __addToState(cont, props=["Locked", "Opened", "Direction"])
                 
             else:
-                own["Sound"] = playSound("DoorLocked1", own.parent)
+                own["Sound"] = playSound("Door" + own["Type"] + "Locked", own.parent)
 
 
 def container(cont):
