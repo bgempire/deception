@@ -10,6 +10,7 @@ DEBUG = 0
 TIMER_INCREMENT = 1 / 60
 MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
+MOVE_CROUCH_MULTIPLIER = 0.55
 MOVE_STAMINA_DRAIN = 0.0005
 MOVE_STAMINA_RUN_BIAS = 0.05
 MOVE_STAMINA_TIRED_BIAS = 0.4
@@ -19,11 +20,12 @@ FLASHLIGHT_BATTERY_DRAIN = 0.0000 # Default: 0.0001
 SOUND_STEPS_INTERVAL = 0.65 # seconds
 USE_DISTANCE = 2.0 # meters
 DEFAULT_PROPS = {
-    "Run": False,
-    "MoveH": 0,
-    "MoveV": 0,
+    "Crouch": False,
     "FlashlightClick": False,
     "Ground": "",
+    "MoveH": 0,
+    "MoveV": 0,
+    "Run": False,
     "TimerSteps": 0.0,
 }
 
@@ -99,10 +101,12 @@ def __inputManager(cont):
     isLeft = isKeyPressed(config["KeyLeft"])
     isRight = isKeyPressed(config["KeyRight"])
     isRun = isKeyPressed(config["KeyRun"])
+    isCrouch = isKeyPressed(config["KeyCrouch"])
     isFlashlight = isKeyPressed(config["KeyFlashlight"], status=1)
     isUse = isKeyPressed(config["KeyUse"], status=1)
     
-    own["Run"] = bool(isRun)
+    own["Run"] = bool(isRun) if not isCrouch else False
+    own["Crouch"] = bool(isCrouch) if not isRun else False
     
     # Turn flashlight on or off
     if isFlashlight:
@@ -154,8 +158,9 @@ def __move(cont):
     own = cont.owner
     player = state["Player"]
     
-    runFactor = MOVE_RUN_MULTIPLIER if own["Run"] and player["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1.0
-    moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * runFactor
+    moveFactor = MOVE_RUN_MULTIPLIER if own["Run"] and player["Stamina"] > MOVE_STAMINA_RUN_BIAS \
+        else MOVE_CROUCH_MULTIPLIER if own["Crouch"] else 1.0
+    moveVector = Vector([-own["MoveH"], -own["MoveV"], 0]).normalized() * MOVE_SPEED_FACTOR * moveFactor
     
     onGround = own.rayCast(own.worldPosition + Vector([0, 0, -1]), own, 1)
     
@@ -215,9 +220,10 @@ def __sound(cont):
             
         # Step sounds
         if own["TimerSteps"] >= 0 and own["Ground"]:
-            runFactor = 1.8 if own["Run"] and player["Stamina"] > MOVE_STAMINA_RUN_BIAS else 1
+            moveFactor = 1.8 if own["Run"] and player["Stamina"] > MOVE_STAMINA_RUN_BIAS \
+                else 0.65 if own["Crouch"] else 1
             
-            own["TimerSteps"] = -SOUND_STEPS_INTERVAL / runFactor
+            own["TimerSteps"] = -SOUND_STEPS_INTERVAL / moveFactor
             
             soundName = "Step"
             soundName += "Run" if own["Run"] else "Walk"
@@ -226,7 +232,7 @@ def __sound(cont):
             
             handle = playSound(soundName, own)
             handle.pitch = 1 + (1 / randint(8, 15) * choice((-1, 1)))
-            handle.volume *= 1 if own["Run"] else 0.3
+            handle.volume *= 1 if own["Run"] else 0.06 if own["Crouch"] else 0.3
 
 
 def __use(cont):
