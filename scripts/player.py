@@ -40,11 +40,12 @@ def main(cont):
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
             __init(cont)
             
-        __inputManager(cont)
-        __mouseLook(cont)
-        __move(cont)
-        __flashlight(cont)
-        __sound(cont)
+        else:
+            __inputManager(cont)
+            __mouseLook(cont)
+            __move(cont)
+            __flashlight(cont)
+            __sound(cont)
 
 
 def __flashlight(cont):
@@ -144,9 +145,13 @@ def __mouseLook(cont):
     own = cont.owner
     mouseX = cont.actuators["MouseX"] # type: KX_MouseActuator
     mouseY = cont.actuators["MouseY"] # type: KX_MouseActuator
+    camera = own.childrenRecursive.get("PlayerCamera") # type: KX_Camera
+    
+    if camera:
+        camera.timeOffset = 10.0
     
     mouseX.sensitivity = [config["MouseSensitivity"], 0]
-    mouseY.sensitivity = [0, config["MouseSensitivity"]]
+    mouseY.sensitivity = [0, -config["MouseSensitivity"]]
     
     for sen in (mouseX, mouseY):
         cont.activate(sen)
