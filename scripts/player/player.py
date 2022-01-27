@@ -1,8 +1,6 @@
-""" This module is responsible for the player logic, from movement to scenery interactions. """
-
 import bge
 from bge.types import *
-from .bgf import config, state, isKeyPressed
+from ..bgf import config, state, isKeyPressed
 from mathutils import Vector
 
 
@@ -30,7 +28,7 @@ DEFAULT_PROPS = {
 }
 
 
-def main(cont):
+def player(cont):
     # type: (SCA_PythonController) -> None
     
     always = cont.sensors["Always"] # type: SCA_AlwaysSensor
@@ -195,7 +193,7 @@ def __sound(cont):
     # type: (SCA_PythonController) -> None
     
     import aud
-    from .bgf import playSound
+    from ..bgf import playSound
     from random import choice, randint
     
     own = cont.owner
