@@ -50,10 +50,10 @@ def __flashlight(cont):
     
     own = cont.owner
     player = state["Player"]
-    _flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
+    flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
     
-    if _flashlight:
-        _flashlight.timeOffset = FLASHLIGHT_MOVE_SMOOTH
+    if flashlight:
+        flashlight.timeOffset = FLASHLIGHT_MOVE_SMOOTH
         
         if player["FlashlightOn"]:
             flashlightForce = 0.5 if player["FlashlightOn"] == 1 else player["FlashlightOn"]
@@ -64,10 +64,10 @@ def __flashlight(cont):
             if player["FlashlightBattery"] < 0:
                 player["FlashlightBattery"] = 0.0
                 
-            _flashlight.energy = (FLASHLIGHT_MAX_ENERGY * flashlightForce) * player["FlashlightBattery"]
+            flashlight.energy = (FLASHLIGHT_MAX_ENERGY * flashlightForce) * player["FlashlightBattery"]
                 
         else:
-            _flashlight.energy = 0.0
+            flashlight.energy = 0.0
 
 
 def __init(cont):
