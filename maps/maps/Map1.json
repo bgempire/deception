@@ -147,8 +147,8 @@
                          "type":"string",
                          "value":"Key1"
                         }],
-                 "template":"templates\/Item.json",
-                 "x":60,
+                 "template":"..\/templates\/Item.json",
+                 "x":120,
                  "y":100
                 }, 
                 {
@@ -164,7 +164,7 @@
                          "type":"bool",
                          "value":true
                         }],
-                 "template":"templates\/Door.json",
+                 "template":"..\/templates\/Door.json",
                  "x":120,
                  "y":160
                 }, 
@@ -177,7 +177,7 @@
                          "value":0
                         }],
                  "rotation":90,
-                 "template":"templates\/Player.json",
+                 "template":"..\/templates\/Player.json",
                  "x":160,
                  "y":100
                 }, 
@@ -189,7 +189,7 @@
                          "type":"bool",
                          "value":true
                         }],
-                 "template":"templates\/Door.json",
+                 "template":"..\/templates\/Door.json",
                  "x":220,
                  "y":380
                 }, 
@@ -201,7 +201,7 @@
                          "type":"bool",
                          "value":true
                         }],
-                 "template":"templates\/Door.json",
+                 "template":"..\/templates\/Door.json",
                  "x":1180,
                  "y":380
                 }, 
@@ -218,7 +218,7 @@
                          "type":"bool",
                          "value":true
                         }],
-                 "template":"templates\/Door.json",
+                 "template":"..\/templates\/Door.json",
                  "x":1060,
                  "y":480
                 }, 
@@ -230,13 +230,13 @@
                          "type":"string",
                          "value":"Key2"
                         }],
-                 "template":"templates\/Item.json",
+                 "template":"..\/templates\/Item.json",
                  "x":820,
                  "y":220
                 }, 
                 {
                  "id":26,
-                 "template":"templates\/Item.json",
+                 "template":"..\/templates\/Item.json",
                  "x":1140,
                  "y":420
                 }, 
@@ -248,7 +248,7 @@
                          "type":"bool",
                          "value":true
                         }],
-                 "template":"templates\/Door.json",
+                 "template":"..\/templates\/Door.json",
                  "x":500,
                  "y":380
                 }, 
@@ -260,7 +260,7 @@
                          "type":"bool",
                          "value":true
                         }],
-                 "template":"templates\/Door.json",
+                 "template":"..\/templates\/Door.json",
                  "x":480,
                  "y":380
                 }],
@@ -279,7 +279,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"Tileset.json"
+         "source":"..\/tilesets\/Tileset.json"
         }],
  "tilewidth":20,
  "type":"map",

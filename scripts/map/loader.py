@@ -19,8 +19,8 @@ def load():
     from ..bgf import curPath, loadFile, loadFiles, dump
     
     global __tilesetRaw, __mapsRaw, __templatesRaw, maps, tileset
-    __tilesetRaw = loadFile(curPath / "maps/Tileset.json")
-    __mapsRaw = loadFiles(curPath / "maps", pattern="Map*.json")
+    __tilesetRaw = loadFile(curPath / "maps/tilesets/Tileset.json")
+    __mapsRaw = loadFiles(curPath / "maps/maps", pattern="Map*.json")
     __templatesRaw = loadFiles(curPath / "maps/templates", pattern="*.json")
     tileset = __getTileset()
     maps = __getMaps()

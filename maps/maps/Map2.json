@@ -68,7 +68,7 @@
                          "type":"bool",
                          "value":true
                         }],
-                 "template":"templates\/Door.json",
+                 "template":"..\/templates\/Door.json",
                  "x":80,
                  "y":20
                 }, 
@@ -80,14 +80,14 @@
                          "type":"string",
                          "value":"Key1"
                         }],
-                 "template":"templates\/Item.json",
+                 "template":"..\/templates\/Item.json",
                  "x":20,
                  "y":40
                 }, 
                 {
                  "id":4,
                  "rotation":180,
-                 "template":"templates\/Player.json",
+                 "template":"..\/templates\/Player.json",
                  "x":59.947404575221,
                  "y":59.9476797595345
                 }],
@@ -106,7 +106,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"Tileset.json"
+         "source":"..\/tilesets\/Tileset.json"
         }],
  "tilewidth":20,
  "type":"map",

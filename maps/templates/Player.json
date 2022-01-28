@@ -23,7 +23,7 @@
  "tileset":
     {
      "firstgid":1,
-     "source":"..\/Tileset.json"
+     "source":"..\/tilesets\/Tileset.json"
     },
  "type":"template"
 }

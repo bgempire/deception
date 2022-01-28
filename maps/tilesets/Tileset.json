@@ -14,421 +14,421 @@
  "tiles":[
         {
          "id":58,
-         "image":"tiles\/Player.png",
+         "image":"..\/tiles\/Player.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":40,
-         "image":"tiles\/Asphalt1.png",
+         "image":"..\/tiles\/Asphalt1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":41,
-         "image":"tiles\/Carpet1.png",
+         "image":"..\/tiles\/Carpet1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":43,
-         "image":"tiles\/Grass1.png",
+         "image":"..\/tiles\/Grass1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":95,
-         "image":"tiles\/TrailStraight1.png",
+         "image":"..\/tiles\/TrailStraight1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":94,
-         "image":"tiles\/TrailCorner1.png",
+         "image":"..\/tiles\/TrailCorner1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":97,
-         "image":"tiles\/TrailEnd1.png",
+         "image":"..\/tiles\/TrailEnd1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":98,
-         "image":"tiles\/TrailThree1.png",
+         "image":"..\/tiles\/TrailThree1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":56,
-         "image":"tiles\/Wood1.png",
+         "image":"..\/tiles\/Wood1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":47,
-         "image":"tiles\/Tiles1.png",
+         "image":"..\/tiles\/Tiles1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":44,
-         "image":"tiles\/Sidewalk1.png",
+         "image":"..\/tiles\/Sidewalk1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":45,
-         "image":"tiles\/SidewalkCorner1.png",
+         "image":"..\/tiles\/SidewalkCorner1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":46,
-         "image":"tiles\/SidewalkCorner2.png",
+         "image":"..\/tiles\/SidewalkCorner2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":48,
-         "image":"tiles\/Vegetation1.png",
+         "image":"..\/tiles\/Vegetation1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":57,
-         "image":"tiles\/Vegetation2.png",
+         "image":"..\/tiles\/Vegetation2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":100,
-         "image":"tiles\/Vegetation3.png",
+         "image":"..\/tiles\/Vegetation3.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":108,
-         "image":"tiles\/Vegetation4.png",
+         "image":"..\/tiles\/Vegetation4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":55,
-         "image":"tiles\/Window1.png",
+         "image":"..\/tiles\/Window1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":42,
-         "image":"tiles\/Door1.png",
+         "image":"..\/tiles\/Door1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":66,
-         "image":"tiles\/Door2.png",
+         "image":"..\/tiles\/Door2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":106,
-         "image":"tiles\/DoorDouble1.png",
+         "image":"..\/tiles\/DoorDouble1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":107,
-         "image":"tiles\/DoorDouble2.png",
+         "image":"..\/tiles\/DoorDouble2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":52,
-         "image":"tiles\/WallStraight1.png",
+         "image":"..\/tiles\/WallStraight1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":49,
-         "image":"tiles\/WallCorner1.png",
+         "image":"..\/tiles\/WallCorner1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":53,
-         "image":"tiles\/WallThree1.png",
+         "image":"..\/tiles\/WallThree1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":51,
-         "image":"tiles\/WallFour1.png",
+         "image":"..\/tiles\/WallFour1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":54,
-         "image":"tiles\/WallWindow1.png",
+         "image":"..\/tiles\/WallWindow1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":50,
-         "image":"tiles\/WallDoor1.png",
+         "image":"..\/tiles\/WallDoor1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":101,
-         "image":"tiles\/WallDoorDouble1.png",
+         "image":"..\/tiles\/WallDoorDouble1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":76,
-         "image":"tiles\/WallStraight2.png",
+         "image":"..\/tiles\/WallStraight2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":73,
-         "image":"tiles\/WallCorner2.png",
+         "image":"..\/tiles\/WallCorner2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":77,
-         "image":"tiles\/WallThree2.png",
+         "image":"..\/tiles\/WallThree2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":75,
-         "image":"tiles\/WallFour2.png",
+         "image":"..\/tiles\/WallFour2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":78,
-         "image":"tiles\/WallWindow2.png",
+         "image":"..\/tiles\/WallWindow2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":74,
-         "image":"tiles\/WallDoor2.png",
+         "image":"..\/tiles\/WallDoor2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":102,
-         "image":"tiles\/WallDoorDouble2.png",
+         "image":"..\/tiles\/WallDoorDouble2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":81,
-         "image":"tiles\/WallStraight3.png",
+         "image":"..\/tiles\/WallStraight3.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":79,
-         "image":"tiles\/WallCorner3.png",
+         "image":"..\/tiles\/WallCorner3.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":82,
-         "image":"tiles\/WallThree3.png",
+         "image":"..\/tiles\/WallThree3.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":83,
-         "image":"tiles\/WallWindow3.png",
+         "image":"..\/tiles\/WallWindow3.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":80,
-         "image":"tiles\/WallDoor3.png",
+         "image":"..\/tiles\/WallDoor3.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":103,
-         "image":"tiles\/WallDoorDouble3-1.png",
+         "image":"..\/tiles\/WallDoorDouble3-1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":104,
-         "image":"tiles\/WallDoorDouble3-2.png",
+         "image":"..\/tiles\/WallDoorDouble3-2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":87,
-         "image":"tiles\/WallStraight4.png",
+         "image":"..\/tiles\/WallStraight4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":84,
-         "image":"tiles\/WallCorner4.png",
+         "image":"..\/tiles\/WallCorner4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":88,
-         "image":"tiles\/WallThree4.png",
+         "image":"..\/tiles\/WallThree4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":86,
-         "image":"tiles\/WallFour4.png",
+         "image":"..\/tiles\/WallFour4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":89,
-         "image":"tiles\/WallWindow4.png",
+         "image":"..\/tiles\/WallWindow4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":85,
-         "image":"tiles\/WallDoor4.png",
+         "image":"..\/tiles\/WallDoor4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":105,
-         "image":"tiles\/WallDoorDouble4.png",
+         "image":"..\/tiles\/WallDoorDouble4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":63,
-         "image":"tiles\/Fence1.png",
+         "image":"..\/tiles\/Fence1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":64,
-         "image":"tiles\/FenceCorner1.png",
+         "image":"..\/tiles\/FenceCorner1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":65,
-         "image":"tiles\/FenceDoor1.png",
+         "image":"..\/tiles\/FenceDoor1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":70,
-         "image":"tiles\/Fence2.png",
+         "image":"..\/tiles\/Fence2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":71,
-         "image":"tiles\/FenceCorner2.png",
+         "image":"..\/tiles\/FenceCorner2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":72,
-         "image":"tiles\/FenceDoor2.png",
+         "image":"..\/tiles\/FenceDoor2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":67,
-         "image":"tiles\/Sofa1.png",
+         "image":"..\/tiles\/Sofa1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":68,
-         "image":"tiles\/Closet1.png",
+         "image":"..\/tiles\/Closet1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":69,
-         "image":"tiles\/Bed1.png",
+         "image":"..\/tiles\/Bed1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":59,
-         "image":"tiles\/Roof1.png",
+         "image":"..\/tiles\/Roof1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":61,
-         "image":"tiles\/RoofCornerOut1.png",
+         "image":"..\/tiles\/RoofCornerOut1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":62,
-         "image":"tiles\/RoofSide1.png",
+         "image":"..\/tiles\/RoofSide1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":60,
-         "image":"tiles\/RoofCornerIn1.png",
+         "image":"..\/tiles\/RoofCornerIn1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":90,
-         "image":"tiles\/Roof2.png",
+         "image":"..\/tiles\/Roof2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":92,
-         "image":"tiles\/RoofCornerOut2.png",
+         "image":"..\/tiles\/RoofCornerOut2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":93,
-         "image":"tiles\/RoofSide2.png",
+         "image":"..\/tiles\/RoofSide2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":91,
-         "image":"tiles\/RoofCornerIn2.png",
+         "image":"..\/tiles\/RoofCornerIn2.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":99,
-         "image":"tiles\/LightPost1.png",
+         "image":"..\/tiles\/LightPost1.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":109,
-         "image":"tiles\/Stairs1Base.png",
+         "image":"..\/tiles\/Stairs1Base.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":110,
-         "image":"tiles\/Stairs1Top.png",
+         "image":"..\/tiles\/Stairs1Top.png",
          "imageheight":20,
          "imagewidth":20
         }],
