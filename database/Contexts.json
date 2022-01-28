@@ -19,5 +19,21 @@
                 "Pausable": false
             }
         ]
+    },
+    
+    // Game context
+    "Game": {
+        "Default": false,
+        "Loading": "ScnLoading",
+        "Scenes": [
+            {
+                "Name": "ScnGameHud",
+                "Pausable": false
+            },
+            {
+                "Name": "ScnGame",
+                "Pausable": true
+            }
+        ]
     }
 }
