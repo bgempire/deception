@@ -4,10 +4,10 @@
 
 {
     // Variables
-    "$ColorNormal" : [0.6, 0.6, 1.0, 1.0],
-    "$ColorHover" : [0.6, 1.0, 0.6, 1.0],
-    "$ColorClick" : [1.0, 0.6, 0.6, 1.0],
-    "$ColorDisabled" : [0.5, 0.5, 0.5, 1.0],
+    "$ColorNormal" : [0.1, 0.1, 0.1, 1.0],
+    "$ColorHover" : [0.3, 0.3, 0.3, 1.0],
+    "$ColorClick" : [0.5, 0.5, 0.5, 1.0],
+    "$ColorDisabled" : [0.05, 0.05, 0.05, 1.0],
     "$LabelSize" : 0.5,
     "$LabelColor" : [1.0, 1.0, 1.0, 1.0],
     "$LabelColorDisabled" : [0.5, 0.5, 0.5, 1.0],
