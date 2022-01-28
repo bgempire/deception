@@ -9,13 +9,13 @@ TIMER_INCREMENT = 1 / 60
 MOVE_SPEED_FACTOR = 2.0
 MOVE_RUN_MULTIPLIER = 2.2
 MOVE_CROUCH_MULTIPLIER = 0.55
-MOVE_STAMINA_DRAIN = 0.0005
+MOVE_STAMINA_DRAIN = 0.00075
 MOVE_STAMINA_RUN_BIAS = 0.05
 MOVE_STAMINA_TIRED_BIAS = 0.4
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 2.0
 FLASHLIGHT_MAX_DISTANCE = 20.0
-FLASHLIGHT_BATTERY_DRAIN = 0.0000 # Default: 0.0001
+FLASHLIGHT_BATTERY_DRAIN = 0.0001 # Default: 0.0001
 SOUND_STEPS_INTERVAL = 0.65 # seconds
 USE_DISTANCE = 2.0 # meters
 DEFAULT_PROPS = {
@@ -61,7 +61,7 @@ def __flashlight(cont):
             flashlightDistance = 1 if player["FlashlightOn"] == 2 else 0.01
             
             if player["FlashlightBattery"] > 0:
-                player["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN / flashlightForce
+                player["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN * flashlightForce
                 
             if player["FlashlightBattery"] < 0:
                 player["FlashlightBattery"] = 0.0
