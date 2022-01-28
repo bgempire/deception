@@ -248,7 +248,7 @@ def __use(cont):
             vect = (hitObject.parent.localPosition - own.localPosition) * hitObject.parent.localOrientation # type: Vector
             hitObject["Use"] = True
             
-            if not hitObject.isPlayingAction():
+            if not hitObject["Opened"] and not hitObject.isPlayingAction():
                 hitObject["Direction"] = 1 if vect.y >= 0 else 2
                 hitObject["Speed"] = "Run" if own["Run"] else "Crouch" if own["Crouch"] else "Normal"
                 
