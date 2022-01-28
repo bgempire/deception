@@ -10,6 +10,19 @@ def door(cont):
     from .shared import getEventFromMap, addToState
     import aud
     
+    def _playSound(own, doorAction):
+        # type: (KX_GameObject, str) -> aud.Handle
+        
+        soundVolume = 1.0 if own["Speed"] == "Run" else 0.5 if own["Speed"] == "Normal" else 0.2
+        soundPitch = 1.0 if own["Speed"] == "Run" else 0.85 if own["Speed"] == "Normal" else 0.7
+        
+        handle = own["Sound"] = playSound("Door" + own["Type"] + doorAction, own.parent)
+        handle.volume *= soundVolume
+        handle.pitch *= soundPitch
+        
+        return handle
+        
+    
     DEBUG = 0
     DOOR_SPEED = 0.6
     ANIMS = {
@@ -51,7 +64,6 @@ def door(cont):
             
         animName = getAnimName(own)
         curAnim = ANIMS[animName]
-        soundVolume = 1.0 if own["Speed"] == "Run" else 0.5 if own["Speed"] == "Normal" else 0.1
         animSpeed = 1.5 if own["Speed"] == "Run" else 1.0 if own["Speed"] == "Normal" else 0.6
         
         if own.isPlayingAction():
@@ -64,8 +76,7 @@ def door(cont):
                 
                 if (0 <= frame <= 2 or 30 <= frame <= 32) \
                 and (not own["Sound"] or own["Sound"].status == aud.AUD_STATUS_INVALID):
-                    handle = own["Sound"] = playSound("Door" + own["Type"] + "Close", own.parent)
-                    handle.volume *= soundVolume
+                    handle = _playSound(own, "Close")
                     
         else:
             always.skippedTicks = 10
@@ -82,14 +93,12 @@ def door(cont):
                 if canUnlock:
                     own["Locked"] = False
                     inventory.remove(own["Key"])
-                    handle = own["Sound"] = playSound("Door" + own["Type"] + "Unlocked", own.parent)
-                    handle.volume *= soundVolume
+                    handle = _playSound(own, "Unlocked")
                 
                 else:
                     # Play open sound
                     if not own["Opened"]:
-                        handle = own["Sound"] = playSound("Door" + own["Type"] + "Open", own.parent)
-                        handle.volume *= soundVolume
+                        handle = _playSound(own, "Open")
                         
                     own["Opened"] = not own["Opened"]
                     own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED * animSpeed)
@@ -98,7 +107,6 @@ def door(cont):
                 addToState(cont, props=["Locked", "Opened", "Direction"])
                 
             else:
-                handle = own["Sound"] = playSound("Door" + own["Type"] + "Locked", own.parent)
-                handle.volume *= soundVolume
+                handle = _playSound(own, "Locked")
                 
 
