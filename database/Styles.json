@@ -2,5 +2,16 @@
 // Reference: https://bgempire.github.io/bgforce/widgets
 
 {
+    // Loading text label on loading scene
+    "LoadingLabel" : {
+        "Transition" : "None",
+        "LabelSize" : 1.2
+    },
     
+    // Header titles
+    "Title" : {
+        "LineSize" : 30,
+        "LabelSize" : 1.0,
+        "Justify" : "Center"
+    }
 }

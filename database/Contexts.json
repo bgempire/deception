@@ -2,5 +2,22 @@
 // Reference: https://bgempire.github.io/bgforce/contexts
 
 {
-    
+    // Main menu GUI and background
+    "MainMenu": {
+        "Default": true,
+        "Scenes": [
+            {
+                "Name": "ScnMouseCursor",
+                "Pausable": false
+            },
+            {
+                "Name": "ScnMenuGui",
+                "Pausable": false
+            },
+            {
+                "Name": "ScnMenuBackground",
+                "Pausable": false
+            }
+        ]
+    }
 }
