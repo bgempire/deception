@@ -5,7 +5,7 @@
     "Events": {},
     "Player": {
         "FlashlightBattery": 1.0,
-        "FlashlightOn": true,
+        "FlashlightOn": 2,
         "Inventory": [],
         "Stamina": 1.0
     }

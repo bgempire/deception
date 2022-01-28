@@ -13,7 +13,7 @@ MOVE_STAMINA_DRAIN = 0.0005
 MOVE_STAMINA_RUN_BIAS = 0.05
 MOVE_STAMINA_TIRED_BIAS = 0.4
 FLASHLIGHT_MOVE_SMOOTH = 15.0
-FLASHLIGHT_MAX_ENERGY = 5.0
+FLASHLIGHT_MAX_ENERGY = 2.0
 FLASHLIGHT_BATTERY_DRAIN = 0.0000 # Default: 0.0001
 SOUND_STEPS_INTERVAL = 0.65 # seconds
 USE_DISTANCE = 2.0 # meters
@@ -56,14 +56,15 @@ def __flashlight(cont):
         _flashlight.timeOffset = FLASHLIGHT_MOVE_SMOOTH
         
         if player["FlashlightOn"]:
+            flashlightForce = 0.5 if player["FlashlightOn"] == 1 else player["FlashlightOn"]
             
             if player["FlashlightBattery"] > 0:
-                player["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN
+                player["FlashlightBattery"] -= FLASHLIGHT_BATTERY_DRAIN / flashlightForce
                 
             if player["FlashlightBattery"] < 0:
                 player["FlashlightBattery"] = 0.0
                 
-            _flashlight.energy = FLASHLIGHT_MAX_ENERGY * player["FlashlightBattery"]
+            _flashlight.energy = (FLASHLIGHT_MAX_ENERGY * flashlightForce) * player["FlashlightBattery"]
                 
         else:
             _flashlight.energy = 0.0
@@ -108,7 +109,7 @@ def __inputManager(cont):
     
     # Turn flashlight on or off
     if isFlashlight:
-        player["FlashlightOn"] = not player["FlashlightOn"]
+        player["FlashlightOn"] = 2 if player["FlashlightOn"] == 0 else player["FlashlightOn"] - 1
         own["FlashlightClick"] = True
         
     # Use aimed object
