@@ -9,11 +9,6 @@
              "name":"Debug",
              "type":"bool",
              "value":false
-            }, 
-            {
-             "name":"Height",
-             "type":"int",
-             "value":0
             }],
      "rotation":0,
      "type":"",
