@@ -86,7 +86,7 @@ def __init(cont):
     own.scene["Player"] = own
     
     global DEBUG
-    DEBUG = own.groupObject.get("Debug") if own.groupObject else DEBUG
+    DEBUG = True if own.get("Debug") else DEBUG
     
     if DEBUG:
         light = own.scene.objects.get("Hemi") # type: KX_LightObject

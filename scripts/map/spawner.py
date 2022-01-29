@@ -145,6 +145,10 @@ def __setPlayer(cont):
             if obj:
                 coord3d = coord + tuple([height])
                 __setTile(obj, curTile, coord3d)
+                
+                for prop in curTile.get("Properties", {}).keys():
+                    own[prop] = curTile["Properties"][prop]
+                
                 obj.worldPosition.z += 1
                 obj.scene["MapPosition"] = __getMapPosition(obj)
                 own["PlayerSet"] = True
