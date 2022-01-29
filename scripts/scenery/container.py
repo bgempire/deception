@@ -32,18 +32,26 @@ def container(cont):
         if own["Use"]:
             own["Use"] = False
             
-            if own["Item"] and not own["Taken"]:
-                items = database["Items"] # type: dict[str, dict[str, object]]
-                sound = items.get(own["Item"], {}).get("Sound", 1)
-                
-                own["Sound"] = playSound("ItemPickup" + str(sound), own.parent)
-                
-                # Add item to player's inventory
-                state["Player"]["Inventory"].append(own["Item"])
-                own["Taken"] = True
-                
-                # Add container to state
-                addToState(cont, props=["Taken", "Item"])
+            if own["Item"]:
+                if not own["Taken"]:
+                    items = database["Items"] # type: dict[str, dict[str, object]]
+                    sound = items.get(own["Item"], {}).get("Sound", 1)
+                    
+                    own["Sound"] = playSound("ItemPickup" + str(sound), own.parent)
+                    
+                    # Add item to player's inventory
+                    state["Player"]["Inventory"].append(own["Item"])
+                    own["Taken"] = True
+                    
+                    # Add container to state
+                    addToState(cont, props=["Taken", "Item"])
+                    own.sendMessage("UpdateDescription", ",".join(["ContainerTake", own["Item"]]))
+                    
+                else:
+                    own.sendMessage("UpdateDescription", ",".join(["ContainerTaken", own["Item"]]))
+                    
+            else:
+                own.sendMessage("UpdateDescription", ",".join(["ContainerEmpty"]))
 
 
 

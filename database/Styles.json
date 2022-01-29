@@ -13,5 +13,12 @@
         "LineSize" : 30,
         "LabelSize" : 1.0,
         "Justify" : "Center"
+    },
+    
+    // Description when player uses object
+    "UseDescription" : {
+        "LineSize" : 60,
+        "LabelSize" : 0.4,
+        "Justify" : "Left"
     }
 }

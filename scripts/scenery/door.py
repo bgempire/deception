@@ -93,6 +93,7 @@ def door(cont):
                 if canUnlock:
                     own["Locked"] = False
                     inventory.remove(own["Key"])
+                    own.sendMessage("UpdateDescription", ",".join(["DoorUnlocked", own["Key"]]))
                     handle = _playSound(own, "Unlocked")
                 
                 else:
@@ -108,5 +109,6 @@ def door(cont):
                 
             else:
                 handle = _playSound(own, "Locked")
+                own.sendMessage("UpdateDescription", ",".join(["DoorLocked"]))
                 
 

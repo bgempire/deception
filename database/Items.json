@@ -1,7 +1,28 @@
 // Pickable items definitions
 
 {
+    "Battery": {
+        "Sound": 1,
+        "Pronoum": "F"
+    },
     "Key1": {
-        "Sound": 2
+        "Sound": 2,
+        "Pronoum": "F"
+    },
+    "Key2": {
+        "Sound": 2,
+        "Pronoum": "F"
+    },
+    "Key3": {
+        "Sound": 2,
+        "Pronoum": "F"
+    },
+    "Key4": {
+        "Sound": 2,
+        "Pronoum": "F"
+    },
+    "Key5": {
+        "Sound": 2,
+        "Pronoum": "F"
     }
 }

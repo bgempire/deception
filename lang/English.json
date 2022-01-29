@@ -78,5 +78,34 @@
     
     // About menu
     "AboutTitle" : "About",
-    "AboutText" : "BGForce is a framework for Blender Game Engine and UPBGE created by Joel Gomes (BGEmpire). You are free to use it as you wish."
+    "AboutText" : "BGForce is a framework for Blender Game Engine and UPBGE created by Joel Gomes (BGEmpire). You are free to use it as you wish.",
+    
+    // Pronouns
+    "AF": "a",
+    "AM": "a",
+    "TheF": "the",
+    "TheM": "the",
+    
+    // Items
+    "ItemBattery": "Battery",
+    "ItemBatteryDesc": "3V lithium battery. It fits my flashlight.",
+    "ItemKey1": "Front door key",
+    "ItemKey1Desc": "Key to our house's front door.",
+    "ItemKey2": "Maintenance shack key",
+    "ItemKey2Desc": "Got it from the janitor's corpse.",
+    "ItemKey3": "Back door key",
+    "ItemKey3Desc": "Key to the back door of Margaridas building.",
+    "ItemKey4": "Apartment 32 key",
+    "ItemKey4Desc": "Key to the apartment 32 of Margaridas building.",
+    "ItemKey5": "Back gate key",
+    "ItemKey5Desc": "It's written on the key ring: 'Back gate'",
+    
+    // Container
+    "ContainerEmpty": "There's nothing useful here.",
+    "ContainerTake": "I got {} {}.",
+    "ContainerTaken": "There's nothing else in here.",
+    
+    // Door
+    "DoorLocked": "It's locked...",
+    "DoorUnlocked": "I used {} {} to unlock the door."
 }

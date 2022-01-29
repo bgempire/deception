@@ -3,6 +3,7 @@
 
 {
     "Events": {},
+    "UseDescription": "",
     "Player": {
         "FlashlightBattery": 1.0,
         "FlashlightOn": 1,
