@@ -282,6 +282,58 @@
                          "template":"..\/templates\/Item.json",
                          "x":1140,
                          "y":460
+                        }, 
+                        {
+                         "id":43,
+                         "name":"Item:Battery",
+                         "properties":[
+                                {
+                                 "name":"Item",
+                                 "type":"string",
+                                 "value":"Battery"
+                                }],
+                         "template":"..\/templates\/Item.json",
+                         "x":60,
+                         "y":100
+                        }, 
+                        {
+                         "id":44,
+                         "name":"Item:Battery",
+                         "properties":[
+                                {
+                                 "name":"Item",
+                                 "type":"string",
+                                 "value":"Battery"
+                                }],
+                         "template":"..\/templates\/Item.json",
+                         "x":320,
+                         "y":160
+                        }, 
+                        {
+                         "id":45,
+                         "name":"Item:Battery",
+                         "properties":[
+                                {
+                                 "name":"Item",
+                                 "type":"string",
+                                 "value":"Battery"
+                                }],
+                         "template":"..\/templates\/Item.json",
+                         "x":860,
+                         "y":220
+                        }, 
+                        {
+                         "id":46,
+                         "name":"Item:Battery",
+                         "properties":[
+                                {
+                                 "name":"Item",
+                                 "type":"string",
+                                 "value":"Battery"
+                                }],
+                         "template":"..\/templates\/Item.json",
+                         "x":1140,
+                         "y":500
                         }],
                  "opacity":1,
                  "type":"objectgroup",
@@ -715,7 +767,7 @@
          "y":0
         }],
  "nextlayerid":66,
- "nextobjectid":43,
+ "nextobjectid":47,
  "orientation":"orthogonal",
  "renderorder":"left-down",
  "tiledversion":"1.7.2",
