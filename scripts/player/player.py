@@ -49,6 +49,8 @@ def player(cont):
 def __flashlight(cont):
     # type: (SCA_PythonController) -> None
     
+    from random import randint
+    
     own = cont.owner
     player = state["Player"]
     flashlight = own.childrenRecursive.get("Flashlight") # type: KX_LightObject
@@ -66,7 +68,11 @@ def __flashlight(cont):
             if player["FlashlightBattery"] < 0:
                 player["FlashlightBattery"] = 0.0
                 
-            flashlight.energy = (FLASHLIGHT_MAX_ENERGY * flashlightForce) * player["FlashlightBattery"]
+            if 0 < player["FlashlightBattery"] < 0.3 and randint(0, 100) < 10 or player["FlashlightBattery"] == 0:
+                flashlight.energy = 0.0
+            else:
+                flashlight.energy = FLASHLIGHT_MAX_ENERGY * flashlightForce
+                
             flashlight.distance = FLASHLIGHT_MAX_DISTANCE * flashlightDistance
                 
         else:
