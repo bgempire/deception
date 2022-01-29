@@ -40,7 +40,7 @@ def main(cont):
 
 
 def getCurrentMap(cont, spawnerObj=None):
-    # type: (SCA_PythonController, KX_GameObject) -> dict[str, dict[tuple, dict]]
+    # type: (SCA_PythonController, KX_GameObject) -> dict[str, dict[str, dict[tuple, dict]]]
     
     import sys
     from pathlib import Path
@@ -91,7 +91,7 @@ def __getHeightFromLayer(layer):
     from ast import literal_eval
     
     layerSplit = layer.split(":")
-    return literal_eval(layerSplit[1]) if len(layerSplit) == 2 else 0
+    return literal_eval(layerSplit[-1]) if len(layerSplit) >= 2 else 0
 
 
 def __init(cont):
@@ -154,15 +154,14 @@ def __getPlayerFromMap(cont):
     # type: (SCA_PythonController) -> tuple[tuple[int], dict[str, object], str]
     
     own = cont.owner
-    curMap = own.scene["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
+    curMap = own.scene["CurMap"]["Events"] # type: dict[str, dict[tuple, dict[str, object]]]
     
     for layer in curMap.keys():
-        if "event" in layer.lower():
-            for coord in curMap[layer].keys():
-                curTile = curMap[layer][coord]
-                
-                if curTile["Name"] == "Player":
-                    return [coord, curTile, curTile.get("Properties", {}).get("Height", 0)]
+        for coord in curMap[layer].keys():
+            curTile = curMap[layer][coord]
+            
+            if curTile["Name"] == "Player":
+                return [coord, curTile, curTile.get("Properties", {}).get("Height", 0)]
                     
     return [None, None, None]
 
@@ -173,7 +172,7 @@ def __spawnActors(cont, curPos, all=False):
     from ..bgf import database
     
     own = cont.owner
-    curMap = own.scene["CurMap"] # type: dict[str, dict[tuple, dict[str, object]]]
+    curMap = own.scene["CurMap"]["Events"] # type: dict[str, dict[tuple, dict[str, object]]]
     
     if not "MapActors" in own:
         own["MapActors"] = {}
@@ -181,16 +180,14 @@ def __spawnActors(cont, curPos, all=False):
     mapActors = own["MapActors"] # type: dict[str, dict[tuple, KX_GameObject]]
     
     for layer in curMap.keys():
-        
-        if not "event" in layer.lower():
-            continue
+        height = __getHeightFromLayer(layer)
         
         if not layer in mapActors.keys():
             mapActors[layer] = {}
             
         for coord in curMap[layer].keys():
             curTile = curMap[layer][coord]
-            coord3d = coord + tuple([curTile.get("Height", 0)])
+            coord3d = coord + tuple([height])
             
             if all or __isPositionBetween(curPos, coord):
                 
@@ -208,7 +205,7 @@ def __spawnMap(cont, curPos, all=False):
     own = cont.owner
     
     if curPos != own["LastPosition"] and (not all or not "MapObjs" in own):
-        curMap = own.scene["CurMap"] # type: dict[str, dict[str, object]]
+        curMap = own.scene["CurMap"]["Tiles"] # type: dict[str, dict[str, object]]
         
         if not "MapObjs" in own:
             own["MapObjs"] = {}

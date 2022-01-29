@@ -7,7 +7,7 @@ def door(cont):
     """ Generic behavior of any door. """
     
     from ..bgf import state, playSound
-    from .shared import getEventFromMap, addToState
+    from .helper import getEventFromMap, addToState
     import aud
     
     def _playSound(own, doorAction):

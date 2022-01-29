@@ -7,7 +7,7 @@ def container(cont):
     """ Generic behavior for any item container such as drawers, closets, boxes, etc. """
     
     from ..bgf import state, database, playSound
-    from .shared import getEventFromMap, addToState
+    from .helper import getEventFromMap, addToState
     
     DEBUG = 0
     DEFAULT_PROPS = {

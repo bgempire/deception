@@ -30,28 +30,53 @@ def __getMaps():
     # type: () -> dict
     """ Get formatted maps from raw maps data. """
     
+    def _getHeight(layerName):
+        # type: (str) -> str
+        
+        if len(layerName.split(":")) >= 2:
+            return ":" + layerName.split(":")[1]
+        return ":0"
+    
+    def _getHeightForName(layerName, parentHeight=""):
+        # type: (str, str) -> str
+        
+        if len(layerName.split(":")) >= 2:
+            return ""
+        elif parentHeight:
+            return parentHeight
+        return ":0"
+        
+    
     global __mapsRaw
     maps = {}
     
     for mapName in __mapsRaw.keys():
         sourceMap = __mapsRaw[mapName]
-        targetMap = {}
+        targetMap = {
+            "Events": {},
+            "Tiles": {},
+        }
         
         for layer in sourceMap["layers"]:
+            height = _getHeightForName(layer["name"])
             
             if layer["type"] == "tilelayer":
-                targetMap[layer["name"]] = __getTileLayer(layer, sourceMap)
+                targetMap["Tiles"][layer["name"] + height] = __getTileLayer(layer, sourceMap)
             
             elif layer["type"] == "objectgroup":
-                targetMap[layer["name"]] = __getObjectLayer(layer, sourceMap)
+                targetMap["Events"][layer["name"] + height] = __getObjectLayer(layer, sourceMap)
                 
             elif layer["type"] == "group":
+                layerName = layer["name"].split(":")[0]
+                
                 for subLayer in layer["layers"]:
+                    height = _getHeightForName(subLayer["name"], _getHeight(layer["name"]))
+                    
                     if subLayer["type"] == "tilelayer":
-                        targetMap[layer["name"] + "/" + subLayer["name"]] = __getTileLayer(subLayer, sourceMap)
+                        targetMap["Tiles"][layerName + "/" + subLayer["name"] + height] = __getTileLayer(subLayer, sourceMap)
                     
                     elif subLayer["type"] == "objectgroup":
-                        targetMap[layer["name"] + "/" + subLayer["name"]] = __getObjectLayer(subLayer, sourceMap)
+                        targetMap["Events"][layerName + "/" + subLayer["name"] + height] = __getObjectLayer(subLayer, sourceMap)
                     
         maps[mapName] = targetMap
         
