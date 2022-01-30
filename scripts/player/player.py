@@ -170,15 +170,42 @@ def __inputManager(cont):
 def __mouseLook(cont):
     # type: (SCA_PythonController) -> None
     
+    from math import radians, degrees
+    
     own = cont.owner
-    mouseX = cont.actuators["MouseX"] # type: KX_MouseActuator
-    mouseY = cont.actuators["MouseY"] # type: KX_MouseActuator
     
-    mouseX.sensitivity = [config["MouseSensitivity"], 0]
-    mouseY.sensitivity = [0, config["MouseSensitivity"]]
-    
-    for sen in (mouseX, mouseY):
-        cont.activate(sen)
+    # Enable mouse look when inventory is closed
+    if not own["OnInventory"]:
+        showMouseCursor(cont, arg="False")
+        AXIS_ANGLE_LIMIT = 89.999999
+        axis = own.childrenRecursive.get("CameraAxis") # type: KX_Camera
+        camRot = axis.localOrientation.to_euler()
+        sensitivity = config["MouseSensitivity"] # type: float
+        
+        # Fix axis rotating beyond limit
+        if degrees(camRot.x) <= -90 or degrees(camRot.x) >= 90:
+            getSignal = lambda val: 1 if val >= 0 else -1
+            camRot = axis.localOrientation.to_euler()
+            camRot.x = radians(AXIS_ANGLE_LIMIT * getSignal(degrees(camRot.x)))
+            axis.localOrientation = camRot
+        
+        windowSize = Vector((bge.render.getWindowWidth(), bge.render.getWindowHeight()))
+        windowCenter = Vector((windowSize.x // 2, windowSize.y // 2))
+        mousePos = Vector((bge.logic.mouse.position[0] * windowSize[0], bge.logic.mouse.position[1] * windowSize[1]))
+        centerOffset = (windowCenter - mousePos) * 0.001 # type: Vector
+        
+        # Rotate player in mouse X
+        own.applyRotation((0, 0, centerOffset[0] * sensitivity))
+        
+        # Rotate axis in mouse Y
+        if -AXIS_ANGLE_LIMIT < degrees(camRot.x) < AXIS_ANGLE_LIMIT:
+            axis.applyRotation((-centerOffset.y * sensitivity, 0, 0), True)
+            
+        # Set cursor to center
+        bge.render.setMousePosition(int(windowCenter.x), int(windowCenter.y))
+        
+    else:
+        showMouseCursor(cont, arg="True")
 
 
 def __move(cont):
