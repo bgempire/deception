@@ -12,6 +12,7 @@ MOVE_CROUCH_MULTIPLIER = 0.55
 MOVE_STAMINA_DRAIN = 0.00075
 MOVE_STAMINA_RUN_BIAS = 0.05
 MOVE_STAMINA_TIRED_BIAS = 0.4
+INVENTORY_TOGGLE_INTERVAL = 2.0 # seconds
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 2.0
 FLASHLIGHT_MAX_DISTANCE = 20.0
@@ -118,41 +119,52 @@ def __inputManager(cont):
     isUse = isKeyPressed(config["KeyUse"], status=1)
     isInventory = isKeyPressed(config["KeyInventory"], status=1)
     
-    own["Run"] = bool(isRun) if not isCrouch else False
-    own["Crouch"] = bool(isCrouch) if not isRun else False
-    
+    # Toggle inventory
+    if isInventory and own["TimerInventory"] >=0:
+        own["OnInventory"] = not own["OnInventory"]
+        own["TimerInventory"] = -INVENTORY_TOGGLE_INTERVAL
+        camPos = "[50, 0]" if own["OnInventory"] else "[0, 0]"
+        own.sendMessage("UpdateGui", camPos)
+        
     # Turn flashlight on or off
     if isFlashlight:
         player["FlashlightOn"] = 2 if player["FlashlightOn"] == 0 else player["FlashlightOn"] - 1
         own["FlashlightClick"] = True
-    
-    # Toggle inventory
-    if isInventory:
-        own["OnInventory"] = not own["OnInventory"]
         
-    # Use aimed object
-    if isUse:
-        __use(cont)
-    
-    # Vertical movement
-    if isUp and not isDown:
-        own["MoveV"] = 1
-    
-    elif not isUp and isDown:
-        own["MoveV"] = -1
+    if not own["OnInventory"]:
         
-    else:
-        own["MoveV"] = 0
-    
-    # Horizontal movement
-    if isRight and not isLeft:
-        own["MoveH"] = 1
-    
-    elif not isRight and isLeft:
-        own["MoveH"] = -1
+        own["Run"] = bool(isRun) if not isCrouch else False
+        own["Crouch"] = bool(isCrouch) if not isRun else False
+            
+        # Use aimed object
+        if isUse:
+            __use(cont)
         
+        # Vertical movement
+        if isUp and not isDown:
+            own["MoveV"] = 1
+        
+        elif not isUp and isDown:
+            own["MoveV"] = -1
+            
+        else:
+            own["MoveV"] = 0
+        
+        # Horizontal movement
+        if isRight and not isLeft:
+            own["MoveH"] = 1
+        
+        elif not isRight and isLeft:
+            own["MoveH"] = -1
+            
+        else:
+            own["MoveH"] = 0
+            
     else:
         own["MoveH"] = 0
+        own["MoveV"] = 0
+        own["Run"] = False
+        own["Crouch"] = False
 
 
 def __mouseLook(cont):
