@@ -13,7 +13,7 @@ MOVE_CROUCH_MULTIPLIER = 0.55
 MOVE_STAMINA_DRAIN = 0.00075
 MOVE_STAMINA_RUN_BIAS = 0.05
 MOVE_STAMINA_TIRED_BIAS = 0.4
-INVENTORY_TOGGLE_INTERVAL = 2.0 # seconds
+INVENTORY_TOGGLE_INTERVAL = 1.4 # seconds
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 2.0
 FLASHLIGHT_MAX_DISTANCE = 20.0
@@ -195,42 +195,51 @@ def __messageManager(cont):
 def __mouseLook(cont):
     # type: (SCA_PythonController) -> None
     
+    def _mouseToCenter():
+        windowSize = Vector((bge.render.getWindowWidth(), bge.render.getWindowHeight()))
+        windowCenter = Vector((windowSize.x // 2, windowSize.y // 2))
+        bge.render.setMousePosition(int(windowCenter.x), int(windowCenter.y))
+    
     from math import radians, degrees
     
     own = cont.owner
     
-    # Enable mouse look when inventory is closed
-    if not own["OnInventory"]:
-        showMouseCursor(cont, arg="False")
-        AXIS_ANGLE_LIMIT = 89.999999
-        axis = own.childrenRecursive.get("CameraAxis") # type: KX_Camera
-        camRot = axis.localOrientation.to_euler()
-        sensitivity = config["MouseSensitivity"] # type: float
-        
-        # Fix axis rotating beyond limit
-        if degrees(camRot.x) <= -90 or degrees(camRot.x) >= 90:
-            getSignal = lambda val: 1 if val >= 0 else -1
-            camRot = axis.localOrientation.to_euler()
-            camRot.x = radians(AXIS_ANGLE_LIMIT * getSignal(degrees(camRot.x)))
-            axis.localOrientation = camRot
-        
-        windowSize = Vector((bge.render.getWindowWidth(), bge.render.getWindowHeight()))
-        windowCenter = Vector((windowSize.x // 2, windowSize.y // 2))
-        mousePos = Vector((bge.logic.mouse.position[0] * windowSize[0], bge.logic.mouse.position[1] * windowSize[1]))
-        centerOffset = (windowCenter - mousePos) * 0.001 # type: Vector
-        
-        # Rotate player in mouse X
-        own.applyRotation((0, 0, centerOffset[0] * sensitivity))
-        
-        # Rotate axis in mouse Y
-        if -AXIS_ANGLE_LIMIT < degrees(camRot.x) < AXIS_ANGLE_LIMIT:
-            axis.applyRotation((-centerOffset.y * sensitivity, 0, 0), True)
-            
-        # Set cursor to center
-        bge.render.setMousePosition(int(windowCenter.x), int(windowCenter.y))
-        
-    else:
+    if own["OnInventory"]:
         showMouseCursor(cont, arg="True")
+    
+    # Enable mouse look when inventory is closed
+    elif not own["OnInventory"]:
+        showMouseCursor(cont, arg="False")
+        
+        if own["TimerInventory"] >= -INVENTORY_TOGGLE_INTERVAL + 0.1:
+            AXIS_ANGLE_LIMIT = 89.999999
+            axis = own.childrenRecursive.get("CameraAxis") # type: KX_Camera
+            camRot = axis.localOrientation.to_euler()
+            sensitivity = config["MouseSensitivity"] # type: float
+            
+            # Fix axis rotating beyond limit
+            if degrees(camRot.x) <= -90 or degrees(camRot.x) >= 90:
+                getSignal = lambda val: 1 if val >= 0 else -1
+                camRot = axis.localOrientation.to_euler()
+                camRot.x = radians(AXIS_ANGLE_LIMIT * getSignal(degrees(camRot.x)))
+                axis.localOrientation = camRot
+            
+            windowSize = Vector((bge.render.getWindowWidth(), bge.render.getWindowHeight()))
+            windowCenter = Vector((windowSize.x // 2, windowSize.y // 2))
+            mousePos = Vector((bge.logic.mouse.position[0] * windowSize[0], bge.logic.mouse.position[1] * windowSize[1]))
+            centerOffset = (windowCenter - mousePos) * 0.001 # type: Vector
+            
+            # Rotate player in mouse X
+            own.applyRotation((0, 0, centerOffset[0] * sensitivity))
+            
+            # Rotate axis in mouse Y
+            if -AXIS_ANGLE_LIMIT < degrees(camRot.x) < AXIS_ANGLE_LIMIT:
+                axis.applyRotation((-centerOffset.y * sensitivity, 0, 0), True)
+                
+            _mouseToCenter()
+        
+        else:
+            _mouseToCenter()
 
 
 def __move(cont):
