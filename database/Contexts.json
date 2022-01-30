@@ -29,6 +29,10 @@
         "Bgm": "EmptyCity",
         "Scenes": [
             {
+                "Name": "ScnMouseCursor",
+                "Pausable": false
+            },
+            {
                 "Name": "ScnGameHud",
                 "Pausable": false
             },
