@@ -923,7 +923,7 @@ def _getTextFromGroup(cont, description=False):
     label = str(group["Label"]).strip() if "Label" in group else ""
     
     if label == "DESCRIPTION":
-        return bge.logic.__widgetDescription
+        return _wrapText(bge.logic.__widgetDescription, own["Justify"], own["LineSize"])
         
     else:
         try:
@@ -1002,6 +1002,22 @@ def _getTextFromGroup(cont, description=False):
         label = "\n".join(label)
     
     return label
+
+
+def _wrapText(text, justify, lineSize):
+    # type: (str, str, int) -> str
+    
+    justify = justify.lower()
+    text = wrap(text, lineSize)
+    
+    if justify == "left":
+        return "\n".join(text)
+    
+    elif justify == "center":
+        return "\n".join([i.center(lineSize) for i in text])
+    
+    elif justify == "right":
+        return "\n".join([i.rjust(lineSize) for i in text])
 
 
 def _getCommandsFromGroup(cont):
