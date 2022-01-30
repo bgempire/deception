@@ -273,4 +273,12 @@ def __setTile(obj, tile, coord3d):
     obj.worldPosition.x += tile.get("Offset", (0, 0))[0]
     obj.worldPosition.y += -tile.get("Offset", (0, 0))[1]
     obj.worldOrientation = [0, 0, radians(-tile.get("Rotation", 0))]
+    
+    if tile.get("Properties", {}).get("Color"):
+        color = tile["Properties"]["Color"]
+        obj.color = color
+        
+        for o in obj.children:
+            o.color = color
+        
 
