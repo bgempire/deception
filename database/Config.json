@@ -34,5 +34,6 @@
     "KeyRun": "LEFTSHIFT",
     "KeyCrouch": "LEFTCTRL",
     "KeyFlashlight": "F",
-    "KeyUse": "E"
+    "KeyUse": "E",
+    "KeyInventory": "SPACE"
 }

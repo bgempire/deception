@@ -26,6 +26,8 @@ DEFAULT_PROPS = {
     "MoveV": 0,
     "Run": False,
     "TimerSteps": 0.0,
+    "TimerInventory": 0.0,
+    "OnInventory": False,
 }
 
 
@@ -39,6 +41,8 @@ def player(cont):
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
             __init(cont)
             
+        cont.owner["TimerInventory"] += TIMER_INCREMENT
+        
         __inputManager(cont)
         __mouseLook(cont)
         __move(cont)
@@ -112,6 +116,7 @@ def __inputManager(cont):
     isCrouch = isKeyPressed(config["KeyCrouch"])
     isFlashlight = isKeyPressed(config["KeyFlashlight"], status=1)
     isUse = isKeyPressed(config["KeyUse"], status=1)
+    isInventory = isKeyPressed(config["KeyInventory"], status=1)
     
     own["Run"] = bool(isRun) if not isCrouch else False
     own["Crouch"] = bool(isCrouch) if not isRun else False
@@ -120,6 +125,10 @@ def __inputManager(cont):
     if isFlashlight:
         player["FlashlightOn"] = 2 if player["FlashlightOn"] == 0 else player["FlashlightOn"] - 1
         own["FlashlightClick"] = True
+    
+    # Toggle inventory
+    if isInventory:
+        own["OnInventory"] = not own["OnInventory"]
         
     # Use aimed object
     if isUse:
