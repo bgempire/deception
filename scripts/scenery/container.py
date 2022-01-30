@@ -41,6 +41,7 @@ def container(cont):
                     
                     # Add item to player's inventory
                     state["Player"]["Inventory"].append(own["Item"])
+                    state["Player"]["Inventory"].sort()
                     own["Taken"] = True
                     
                     # Add container to state
