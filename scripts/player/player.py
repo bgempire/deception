@@ -28,7 +28,7 @@ DEFAULT_PROPS = {
     "MoveV": 0,
     "Run": False,
     "TimerSteps": 0.0,
-    "TimerInventory": 0.0,
+    "TimerInventory": -INVENTORY_TOGGLE_INTERVAL,
     "OnInventory": False,
 }
 
