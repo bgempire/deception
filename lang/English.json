@@ -92,13 +92,13 @@
     "ItemKey1": "Front door key",
     "ItemKey1Desc": "Key to our house's front door.",
     "ItemKey2": "Maintenance shack key",
-    "ItemKey2Desc": "Got it from the janitor's corpse.",
+    "ItemKey2Desc": "Maintenance shack key. Got it from the janitor's corpse.",
     "ItemKey3": "Back door key",
     "ItemKey3Desc": "Key to the back door of Margaridas building.",
     "ItemKey4": "Apartment 32 key",
-    "ItemKey4Desc": "Key to the apartment 32 of Margaridas building.",
+    "ItemKey4Desc": "Key to the apartment 32 on Margaridas building.",
     "ItemKey5": "Back gate key",
-    "ItemKey5Desc": "It's written on the key ring: 'Back gate'",
+    "ItemKey5Desc": "Key to the maintenance area back gate.",
     
     // Container
     "ContainerEmpty": "There's nothing useful here.",
@@ -107,5 +107,5 @@
     
     // Door
     "DoorLocked": "It's locked...",
-    "DoorUnlocked": "I used {} {} to unlock the door."
+    "DoorUnlocked": "I unlocked it using {} {}."
 }

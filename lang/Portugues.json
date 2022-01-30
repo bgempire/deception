@@ -92,13 +92,13 @@
     "ItemKey1": "Chave da porta da frente",
     "ItemKey1Desc": "Chave da porta da frente da nossa casa.",
     "ItemKey2": "Chave do barraco da manutenção",
-    "ItemKey2Desc": "Peguei ela do cadáver do zelador.",
+    "ItemKey2Desc": "Chave do barraco da manutenção. Peguei ela no cadáver do zelador.",
     "ItemKey3": "Chave da porta dos fundos",
     "ItemKey3Desc": "Chave para a porta dos fundos do edifício Margaridas.",
     "ItemKey4": "Chave do apartamento 32",
-    "ItemKey4Desc": "Chave para o apartamento 32 do edifício Margaridas.",
+    "ItemKey4Desc": "Chave para o apartamento 32 no edifício Margaridas.",
     "ItemKey5": "Chave do portão dos fundos",
-    "ItemKey5Desc": "Está escrito em seu chaveiro: 'Portão dos fundos'",
+    "ItemKey5Desc": "Chave do portão dos fundos da área de manutenção.",
     
     // Container
     "ContainerEmpty": "Não há nada de útil aqui.",
@@ -107,5 +107,5 @@
     
     // Door
     "DoorLocked": "Está trancada...",
-    "DoorUnlocked": "Eu usei {} {} para destrancar a porta."
+    "DoorUnlocked": "Eu destranquei usando {} {}."
 }
