@@ -3,26 +3,33 @@
 {
     "Battery": {
         "Sound": 1,
-        "Pronoum": "F"
+        "Usable": true,
+        "Pronoum": "F",
+        "Command": "state['Player']['FlashlightBattery'] = 1.0"
     },
     "Key1": {
         "Sound": 2,
+        "Usable": false,
         "Pronoum": "F"
     },
     "Key2": {
         "Sound": 2,
+        "Usable": false,
         "Pronoum": "F"
     },
     "Key3": {
         "Sound": 2,
+        "Usable": false,
         "Pronoum": "F"
     },
     "Key4": {
         "Sound": 2,
+        "Usable": false,
         "Pronoum": "F"
     },
     "Key5": {
         "Sound": 2,
+        "Usable": false,
         "Pronoum": "F"
     }
 }

@@ -19,10 +19,14 @@ def inventorySlot(cont):
         inventoryExclusive = tuple(set(inventory))
         
         if len(inventoryExclusive) > slot:
+            own["Command"] = "UseItem:" + inventoryExclusive[slot]
+            own["Label"] = "#Item" + inventoryExclusive[slot]
             text.text = str(inventory.count(inventoryExclusive[slot]))
             icon.replaceMesh("Item" + inventoryExclusive[slot])
         
         else:
+            own["Command"] = "UseItem"
+            own["Label"] = ""
             text.text = ""
             icon.replaceMesh("ItemIcon")
 

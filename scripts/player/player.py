@@ -1,6 +1,7 @@
 import bge
 from bge.types import *
-from ..bgf import config, state, isKeyPressed
+from ..bgf import config, state, database, isKeyPressed, playSound
+from ..bgf.operators import showMouseCursor
 from mathutils import Vector
 
 
@@ -45,6 +46,7 @@ def player(cont):
         cont.owner["TimerInventory"] += TIMER_INCREMENT
         
         __inputManager(cont)
+        __messageManager(cont)
         __mouseLook(cont)
         __move(cont)
         __flashlight(cont)
@@ -167,6 +169,29 @@ def __inputManager(cont):
         own["Crouch"] = False
 
 
+def __messageManager(cont):
+    # type: (SCA_PythonController) -> None
+    
+    own = cont.owner
+    message = cont.sensors["Message"] # type: KX_NetworkMessageSensor
+    
+    if message.positive:
+        for i in range(len(message.subjects)):
+            subject = message.subjects[i]
+            body = message.bodies[i]
+            
+            if subject == "UseItem" and body:
+                inventory = state["Player"]["Inventory"] # type: list[str]
+                item = database["Items"].get(body) # type: dict[str, object]
+                
+                if item and item["Usable"]:
+                    inventory.remove(body)
+                    playSound("ItemPickup" + str(item["Sound"]))
+                    
+                    if item.get("Command"):
+                        exec(item["Command"])
+
+
 def __mouseLook(cont):
     # type: (SCA_PythonController) -> None
     
@@ -251,7 +276,6 @@ def __sound(cont):
     # type: (SCA_PythonController) -> None
     
     import aud
-    from ..bgf import playSound
     from random import choice, randint
     
     own = cont.owner
