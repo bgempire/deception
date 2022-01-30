@@ -257,11 +257,8 @@ def __colorHexToRgba(colorHex):
     """ Convert hex color to RGA tuple (#ff00ff00 -> (1.0, 0.0, 1.0, 0.0)). """
     
     colorHex = colorHex.lstrip("#")
+    colorInt = [int(colorHex[i:i+2], 16) for i in (0, 2, 4)]
+    colorFloat = [round(i / 255, 3) for i in colorInt]
     
-    if len(colorHex) == 6:
-        colorHex = "ff" + colorHex
-        
-    value = list(int(colorHex[i:i+2], 16) / 255 for i in (0, 2, 4, 6))
-    value = [round(i, 3) for i in value]
-    return (value[1], value[2], value[3], value[0])
+    return (colorFloat[0], colorFloat[1], colorFloat[2], 1.0)
 
