@@ -50,7 +50,6 @@ def door(cont):
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
             
             for prop in DEFAULT_PROPS.keys():
-                
                 own[prop] = DEFAULT_PROPS[prop]
                 if DEBUG: own.addDebugProperty(prop)
                 
@@ -76,7 +75,7 @@ def door(cont):
                 
                 if (0 <= frame <= 2 or 30 <= frame <= 32) \
                 and (not own["Sound"] or own["Sound"].status == aud.AUD_STATUS_INVALID):
-                    handle = _playSound(own, "Close")
+                    _playSound(own, "Close")
                     
         else:
             always.skippedTicks = 10
@@ -94,12 +93,12 @@ def door(cont):
                     own["Locked"] = False
                     inventory.remove(own["Key"])
                     own.sendMessage("UpdateDescription", ",".join(["DoorUnlocked", own["Key"]]))
-                    handle = _playSound(own, "Unlocked")
+                    _playSound(own, "Unlocked")
                 
                 else:
                     # Play open sound
                     if not own["Opened"]:
-                        handle = _playSound(own, "Open")
+                        _playSound(own, "Open")
                         
                     own["Opened"] = not own["Opened"]
                     own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED * animSpeed)
@@ -108,7 +107,7 @@ def door(cont):
                 addToState(cont, props=["Locked", "Opened", "Direction"])
                 
             else:
-                handle = _playSound(own, "Locked")
+                _playSound(own, "Locked")
                 own.sendMessage("UpdateDescription", ",".join(["DoorLocked"]))
                 
 
