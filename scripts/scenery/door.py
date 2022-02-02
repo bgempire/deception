@@ -2,6 +2,25 @@ import bge
 from bge.types import *
 
 
+DEBUG = 0
+DOOR_SPEED = 0.6
+ANIMS = {
+    "Open1": (0, 20, bge.logic.KX_ACTION_MODE_PLAY),
+    "Close1": (20, 0, bge.logic.KX_ACTION_MODE_PLAY),
+    "Open2": (30, 50, bge.logic.KX_ACTION_MODE_PLAY),
+    "Close2": (50, 30, bge.logic.KX_ACTION_MODE_PLAY),
+}
+DEFAULT_PROPS = {
+    "Direction": 1,
+    "Key": "",
+    "Locked": False,
+    "Opened": False,
+    "Sound": None,
+    "Speed": "Normal",
+    "Use": False,
+}
+
+
 def door(cont):
     # type: (SCA_PythonController) -> None
     """ Generic behavior of any door. """
@@ -21,25 +40,6 @@ def door(cont):
         handle.pitch *= soundPitch
         
         return handle
-        
-    
-    DEBUG = 0
-    DOOR_SPEED = 0.6
-    ANIMS = {
-        "Open1": (0, 20, bge.logic.KX_ACTION_MODE_PLAY),
-        "Close1": (20, 0, bge.logic.KX_ACTION_MODE_PLAY),
-        "Open2": (30, 50, bge.logic.KX_ACTION_MODE_PLAY),
-        "Close2": (50, 30, bge.logic.KX_ACTION_MODE_PLAY),
-    }
-    DEFAULT_PROPS = {
-        "Direction": 1,
-        "Key": "",
-        "Locked": False,
-        "Opened": False,
-        "Sound": None,
-        "Speed": "Normal",
-        "Use": False,
-    }
     
     own = cont.owner
     always = cont.sensors["Always"] # type: SCA_AlwaysSensor
