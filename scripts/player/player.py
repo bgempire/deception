@@ -13,6 +13,7 @@ MOVE_CROUCH_MULTIPLIER = 0.55
 MOVE_STAMINA_DRAIN = 0.00075
 MOVE_STAMINA_RUN_BIAS = 0.05
 MOVE_STAMINA_TIRED_BIAS = 0.4
+MOUSE_LOOK_BIAS = 0.0006
 INVENTORY_TOGGLE_INTERVAL = 1.4 # seconds
 FLASHLIGHT_MOVE_SMOOTH = 15.0
 FLASHLIGHT_MAX_ENERGY = 2.0
@@ -230,11 +231,13 @@ def __mouseLook(cont):
             centerOffset = (windowCenter - mousePos) * 0.001 # type: Vector
             
             # Rotate player in mouse X
-            own.applyRotation((0, 0, centerOffset[0] * sensitivity))
+            if (centerOffset.x < -MOUSE_LOOK_BIAS or centerOffset.x > MOUSE_LOOK_BIAS):
+                own.applyRotation((0, 0, centerOffset[0] * sensitivity))
             
             # Rotate axis in mouse Y
-            if -AXIS_ANGLE_LIMIT < degrees(camRot.x) < AXIS_ANGLE_LIMIT:
-                axis.applyRotation((-centerOffset.y * sensitivity, 0, 0), True)
+            if (centerOffset.y < -MOUSE_LOOK_BIAS or centerOffset.y > MOUSE_LOOK_BIAS):
+                if -AXIS_ANGLE_LIMIT < degrees(camRot.x) < AXIS_ANGLE_LIMIT:
+                    axis.applyRotation((-centerOffset.y * sensitivity, 0, 0), True)
                 
             _mouseToCenter()
         
