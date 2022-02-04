@@ -1,9 +1,11 @@
 import bge
+import aud
 from bge.types import *
 
 
 DEBUG = 0
 DOOR_SPEED = 0.6
+DOOR_UPDATE_SPEED = 10 # skipped ticks
 ANIMS = {
     "Open1": (0, 20, bge.logic.KX_ACTION_MODE_PLAY),
     "Close1": (20, 0, bge.logic.KX_ACTION_MODE_PLAY),
@@ -25,45 +27,13 @@ def door(cont):
     # type: (SCA_PythonController) -> None
     """ Generic behavior of any door. """
     
-    from ..bgf import state, playSound
-    from .helper import getEventFromMap, addToState
-    import aud
-    
-    def _playSound(own, doorAction):
-        # type: (KX_GameObject, str) -> aud.Handle
-        
-        soundVolume = 1.0 if own["Speed"] == "Run" else 0.5 if own["Speed"] == "Normal" else 0.2
-        soundPitch = 1.0 if own["Speed"] == "Run" else 0.85 if own["Speed"] == "Normal" else 0.7
-        
-        handle = own["Sound"] = playSound("Door" + own["Type"] + doorAction, own.parent)
-        handle.volume *= soundVolume
-        handle.pitch *= soundPitch
-        
-        return handle
-    
     own = cont.owner
     always = cont.sensors["Always"] # type: SCA_AlwaysSensor
-    getAnimName = lambda obj: ("Open" if not obj["Opened"] else "Close") + str(obj["Direction"])
     
     if always.positive:
         
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
-            
-            for prop in DEFAULT_PROPS.keys():
-                own[prop] = DEFAULT_PROPS[prop]
-                if DEBUG: own.addDebugProperty(prop)
-                
-            getEventFromMap(cont, DEBUG)
-            
-            # Start opened according to state
-            if own["Opened"]:
-                animName = getAnimName(own)
-                curAnim = ANIMS[animName]
-                own.playAction("Door", curAnim[0], curAnim[0], play_mode=curAnim[2], speed=DOOR_SPEED)
-            
-        animName = getAnimName(own)
-        curAnim = ANIMS[animName]
-        animSpeed = 1.5 if own["Speed"] == "Run" else 1.0 if own["Speed"] == "Normal" else 0.6
+            __init(cont)
         
         if own.isPlayingAction():
             always.skippedTicks = 0
@@ -75,39 +45,95 @@ def door(cont):
                 
                 if (0 <= frame <= 2 or 30 <= frame <= 32) \
                 and (not own["Sound"] or own["Sound"].status == aud.AUD_STATUS_INVALID):
-                    _playSound(own, "Close")
+                    __playSound(own, "Close")
                     
         else:
-            always.skippedTicks = 10
+            always.skippedTicks = DOOR_UPDATE_SPEED
         
-        inventory = state["Player"]["Inventory"] # type: list[str]
-        canUnlock = own["Locked"] and own["Key"] in inventory
-        
+        # Process door use
         if own["Use"]:
-            own["Use"] = False
+            __use(cont)
+
+
+def __init(cont):
+    # type: (SCA_PythonController) -> None
+    
+    from .helper import getEventFromMap
+    
+    own = cont.owner
+    
+    for prop in DEFAULT_PROPS.keys():
+        own[prop] = DEFAULT_PROPS[prop]
+        if DEBUG: own.addDebugProperty(prop)
+        
+    getEventFromMap(cont, DEBUG)
+    
+    # Start opened according to state
+    if own["Opened"]:
+        animName = __getAnimName(own)
+        curAnim = ANIMS[animName]
+        own.playAction("Door", curAnim[0], curAnim[0], play_mode=curAnim[2], speed=DOOR_SPEED)
+
+
+def __use(cont):
+    # type: (SCA_PythonController) -> None
+    
+    from ..bgf import state
+    from .helper import addToState
+    
+    own = cont.owner
             
-            if not own["Locked"] or canUnlock:
+    animName = __getAnimName(own)
+    curAnim = ANIMS[animName]
+    animSpeed = 1.5 if own["Speed"] == "Run" else 1.0 if own["Speed"] == "Normal" else 0.6
+        
+    inventory = state["Player"]["Inventory"] # type: list[str]
+    canUnlock = own["Locked"] and own["Key"] in inventory
+
+    own["Use"] = False
+    
+    if not own["Locked"] or canUnlock:
+        
+        # Unlock door and remove key from inventory
+        if canUnlock:
+            own["Locked"] = False
+            inventory.remove(own["Key"])
+            own.sendMessage("UpdateDescription", ",".join(["DoorUnlocked", own["Key"]]))
+            __playSound(own, "Unlocked")
+        
+        else:
+            # Play open sound
+            if not own["Opened"]:
+                __playSound(own, "Open")
                 
-                # Unlock door and remove key from inventory
-                if canUnlock:
-                    own["Locked"] = False
-                    inventory.remove(own["Key"])
-                    own.sendMessage("UpdateDescription", ",".join(["DoorUnlocked", own["Key"]]))
-                    _playSound(own, "Unlocked")
-                
-                else:
-                    # Play open sound
-                    if not own["Opened"]:
-                        _playSound(own, "Open")
-                        
-                    own["Opened"] = not own["Opened"]
-                    own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED * animSpeed)
-                    
-                # Add door to state
-                addToState(cont, props=["Locked", "Opened", "Direction"])
-                
-            else:
-                _playSound(own, "Locked")
-                own.sendMessage("UpdateDescription", ",".join(["DoorLocked"]))
-                
+            own["Opened"] = not own["Opened"]
+            own.playAction("Door", curAnim[0], curAnim[1], play_mode=curAnim[2], speed=DOOR_SPEED * animSpeed)
+            
+        # Add door to state
+        addToState(cont, props=["Locked", "Opened", "Direction"])
+        
+    else:
+        __playSound(own, "Locked")
+        own.sendMessage("UpdateDescription", ",".join(["DoorLocked"]))
+
+
+def __playSound(own, doorAction):
+    # type: (KX_GameObject, str) -> aud.Handle
+    
+    from ..bgf import playSound
+    
+    soundVolume = 1.0 if own["Speed"] == "Run" else 0.5 if own["Speed"] == "Normal" else 0.2
+    soundPitch = 1.0 if own["Speed"] == "Run" else 0.85 if own["Speed"] == "Normal" else 0.7
+    
+    handle = own["Sound"] = playSound("Door" + own["Type"] + doorAction, own.parent)
+    handle.volume *= soundVolume
+    handle.pitch *= soundPitch
+    
+    return handle
+
+
+def __getAnimName(obj):
+    # type: (KX_GameObject) -> str
+    
+    return ("Open" if not obj["Opened"] else "Close") + str(obj["Direction"])
 
