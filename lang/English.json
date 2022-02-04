@@ -66,6 +66,8 @@
     "OptionsVsyncDesc": "Enable vertical synchronization.",
     "OptionsMotionBlur": "Motion blur:",
     "OptionsMotionBlurDesc": "Motion blur level. 0 to disable.",
+    "OptionsMouseSensitivity": "Mouse:",
+    "OptionsMouseSensitivityDesc": "Mouse sensitivity.",
     
     "OptionsSfxVol": "Effects:",
     "OptionsSfxVolDesc": "Sound effects volume.",
