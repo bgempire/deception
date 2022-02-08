@@ -127,10 +127,10 @@
                         }, 
                         {
                          "id":20,
-                         "rotation":-90,
+                         "rotation":90,
                          "template":"..\/templates\/Player.json",
-                         "x":1480,
-                         "y":840
+                         "x":160,
+                         "y":380
                         }, 
                         {
                          "id":22,
