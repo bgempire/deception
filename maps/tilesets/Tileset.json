@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":70,
+ "tilecount":72,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
@@ -27,6 +27,12 @@
         {
          "id":41,
          "image":"..\/tiles\/Carpet1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":112,
+         "image":"..\/tiles\/Grass1NoCollision.png",
          "imageheight":20,
          "imagewidth":20
         }, 
@@ -87,6 +93,12 @@
         {
          "id":46,
          "image":"..\/tiles\/SidewalkCorner2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":111,
+         "image":"..\/tiles\/VegetationCollision.png",
          "imageheight":20,
          "imagewidth":20
         }, 
