@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":72,
+ "tilecount":89,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
@@ -367,14 +367,104 @@
          "imagewidth":20
         }, 
         {
-         "id":68,
-         "image":"..\/tiles\/Closet1.png",
+         "id":113,
+         "image":"..\/tiles\/Sofa2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":114,
+         "image":"..\/tiles\/Sofa3.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":118,
+         "image":"..\/tiles\/Sofa4.png",
          "imageheight":20,
          "imagewidth":20
         }, 
         {
          "id":69,
          "image":"..\/tiles\/Bed1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":115,
+         "image":"..\/tiles\/Bed2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":116,
+         "image":"..\/tiles\/Sink1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":119,
+         "image":"..\/tiles\/Sink2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":117,
+         "image":"..\/tiles\/Fridge1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":122,
+         "image":"..\/tiles\/Nightstand1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":123,
+         "image":"..\/tiles\/Nightstand2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":68,
+         "image":"..\/tiles\/Closet1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":124,
+         "image":"..\/tiles\/Cupboard1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":125,
+         "image":"..\/tiles\/Cupboard2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":126,
+         "image":"..\/tiles\/Cupboard3.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":127,
+         "image":"..\/tiles\/Cupboard4.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":128,
+         "image":"..\/tiles\/Cupboard5.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":129,
+         "image":"..\/tiles\/Cupboard6.png",
          "imageheight":20,
          "imagewidth":20
         }, 
@@ -441,6 +531,18 @@
         {
          "id":110,
          "image":"..\/tiles\/Stairs1Top.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":120,
+         "image":"..\/tiles\/Fan1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":121,
+         "image":"..\/tiles\/Painting1.png",
          "imageheight":20,
          "imagewidth":20
         }],
