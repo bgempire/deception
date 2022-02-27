@@ -50,7 +50,7 @@ def __use(cont):
     
     own["Use"] = False
     
-    if own["Item"]:
+    if own["Item"] and not own.get("Empty"):
         if not own["Taken"]:
             items = database["Items"] # type: dict[str, dict[str, object]]
             sound = items.get(own["Item"], {}).get("Sound", 1)
