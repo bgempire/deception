@@ -8,7 +8,7 @@
  "margin":0,
  "name":"TilesetGround",
  "spacing":0,
- "tilecount":89,
+ "tilecount":94,
  "tiledversion":"1.7.2",
  "tileheight":20,
  "tiles":[
@@ -397,6 +397,18 @@
          "imagewidth":20
         }, 
         {
+         "id":130,
+         "image":"..\/tiles\/Table1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":131,
+         "image":"..\/tiles\/Table2.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
          "id":116,
          "image":"..\/tiles\/Sink1.png",
          "imageheight":20,
@@ -543,6 +555,24 @@
         {
          "id":121,
          "image":"..\/tiles\/Painting1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":132,
+         "image":"..\/tiles\/Toilet1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":133,
+         "image":"..\/tiles\/Bathtub1.png",
+         "imageheight":20,
+         "imagewidth":20
+        }, 
+        {
+         "id":134,
+         "image":"..\/tiles\/TrashCan1.png",
          "imageheight":20,
          "imagewidth":20
         }],
