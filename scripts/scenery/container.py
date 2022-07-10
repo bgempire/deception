@@ -3,72 +3,77 @@ from bge.types import *
 
 
 DEBUG = 0
-DEFAULT_PROPS = {
-    "Item": "",
-    "Taken": False,
-    "Use": False,
-}
 
 
 def container(cont):
     # type: (SCA_PythonController) -> None
     """ Generic behavior for any item container such as drawers, closets, boxes, etc. """
-    
-    own = cont.owner
+
+    own = cont.owner # type: Container
     always = cont.sensors["Always"] # type: SCA_AlwaysSensor
-    
+
     if always.positive:
-        
+
         if always.status == bge.logic.KX_SENSOR_JUST_ACTIVATED:
-            __init(cont)
-            
-        if own["Use"]:
-            __use(cont)
+            own = Container(own, cont)
+
+        own.update()
 
 
-def __init(cont):
-    # type: (SCA_PythonController) -> None
-    
-    from .helper import getEventFromMap
-    
-    own = cont.owner
-    
-    for prop in DEFAULT_PROPS.keys():
-        own[prop] = DEFAULT_PROPS[prop]
-        if DEBUG: own.addDebugProperty(prop)
-        
-    getEventFromMap(cont, DEBUG)
+class Container(KX_GameObject):
+    DEFAULT_PROPS = {
+        "Item": "",
+        "Taken": False,
+        "Use": False,
+    }
+
+    def __init__(self, obj, cont):
+        # type: (KX_GameObject, SCA_PythonController) -> None
+
+        from .helper import getEventFromMap
+
+        self.currentController = cont # type: SCA_PythonController
+
+        for prop in self.DEFAULT_PROPS.keys():
+            self[prop] = self.DEFAULT_PROPS[prop]
+            if DEBUG: self.addDebugProperty(prop)
+
+        getEventFromMap(self.currentController, DEBUG)
 
 
-def __use(cont):
-    # type: (SCA_PythonController) -> None
-    
-    from .helper import addToState
-    from ..bgf import state, database, playSound
-    
-    own = cont.owner
-    
-    own["Use"] = False
-    
-    if own["Item"] and not own.get("Empty"):
-        if not own["Taken"]:
-            items = database["Items"] # type: dict[str, dict[str, object]]
-            sound = items.get(own["Item"], {}).get("Sound", 1)
-            
-            own["Sound"] = playSound("ItemPickup" + str(sound), own.parent)
-            
-            # Add item to player's inventory
-            state["Player"]["Inventory"].append(own["Item"])
-            state["Player"]["Inventory"].sort()
-            own["Taken"] = True
-            
-            # Add container to state
-            addToState(cont, props=["Taken", "Item"])
-            own.sendMessage("UpdateDescription", ",".join(["ContainerTake", own["Item"]]))
-            
+    def update(self):
+        # type: () -> None
+
+        if self["Use"]:
+            self.__use()
+
+
+    def __use(self):
+        # type: () -> None
+
+        from .helper import addToState
+        from ..bgf import state, database, playSound
+
+        self["Use"] = False
+
+        if self["Item"] and not self.get("Empty"):
+            if not self["Taken"]:
+                items = database["Items"] # type: dict[str, dict[str, object]]
+                sound = items.get(self["Item"], {}).get("Sound", 1)
+
+                self["Sound"] = playSound("ItemPickup" + str(sound), self.parent)
+
+                # Add item to player's inventory
+                state["Player"]["Inventory"].append(self["Item"])
+                state["Player"]["Inventory"].sort()
+                self["Taken"] = True
+
+                # Add container to state
+                addToState(self.currentController, props=["Taken", "Item"])
+                self.sendMessage("UpdateDescription", ",".join(["ContainerTake", self["Item"]]))
+
+            else:
+                self.sendMessage("UpdateDescription", ",".join(["ContainerTaken", self["Item"]]))
+
         else:
-            own.sendMessage("UpdateDescription", ",".join(["ContainerTaken", own["Item"]]))
-            
-    else:
-        own.sendMessage("UpdateDescription", ",".join(["ContainerEmpty"]))
-
+            self.sendMessage("UpdateDescription", ",".join(["ContainerEmpty"]))
